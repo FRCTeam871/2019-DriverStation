@@ -45,7 +45,7 @@ public class TestScreenController {
 
         circleGraph1.initialize(colorMode, new NumericalDataValue(22.));
         circleGraph1.createBatteryRadialGraphBox();
-        pid1.initialize(netTable.getTable("LOL_IDK"));
+        pid1.initialize(netTable.getTable("LOL_IDK"), colorMode);
 
     }
 }

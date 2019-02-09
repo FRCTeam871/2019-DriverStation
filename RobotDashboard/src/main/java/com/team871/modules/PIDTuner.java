@@ -1,10 +1,12 @@
 package com.team871.modules;
 
+import com.team871.config.Style.ColorMode;
 import com.team871.util.data.NetNumericalDataValue;
 import com.team871.util.data.NumericalDataValue;
 import edu.wpi.first.networktables.NetworkTable;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
@@ -35,6 +37,8 @@ public class PIDTuner extends VBox {
 
     private Label error;
     private TextField errorControl;
+
+    private Button sendButton;
 
     private NumericalDataValue pVal;
     private NumericalDataValue iVal;
@@ -67,6 +71,7 @@ public class PIDTuner extends VBox {
         errorControl.setMaxWidth(50);
         errorControl.setEditable(false);
 
+        sendButton = new Button("Send");
 
         GridPane dataGrid = new GridPane();
         dataGrid.addRow(0, pTitle, pControl);
@@ -75,12 +80,15 @@ public class PIDTuner extends VBox {
         dataGrid.addRow(3, setPoint, setPointControl);
         dataGrid.addRow(4, error, errorControl);
         dataGrid.setAlignment(Pos.CENTER_LEFT);
-        this.getChildren().addAll(mainTitle, dataGrid);
-        this.setAlignment(Pos.CENTER_LEFT);
+        this.getChildren().addAll(mainTitle, dataGrid, sendButton);
+        this.setAlignment(Pos.CENTER);
+        sendButton.setAlignment(Pos.CENTER_LEFT);
         this.setPadding(new Insets(5, 5, 5, 5));
+
+
     }
 
-    public void initialize(NetworkTable pidObject) {
+    public void initialize(NetworkTable pidObject, ColorMode colorMode) {
 
         mainTitle.setText(pidObject.toString());
         pVal = new NetNumericalDataValue(pidObject.getEntry(P_Key));
@@ -96,20 +104,29 @@ public class PIDTuner extends VBox {
         errorControl.setText(""    + dVal.getValue());
 
         //Updates:
-        pControl.setOnAction(event -> pidObject.getEntry(P_Key).setNumber(Double.parseDouble(pControl.getText())));
-        pVal.addListener((observable, old, newValue) -> pControl.setText("" + newValue.doubleValue()));
 
-        iControl.setOnAction(event -> pidObject.getEntry(I_Key).setNumber(Double.parseDouble(iControl.getText())));
         iVal.addListener((observable, old, newValue) -> iControl.setText("" + newValue.doubleValue()));
-
-        dControl.setOnAction(event -> pidObject.getEntry(D_Key).setNumber(Double.parseDouble(dControl.getText())));
+        pVal.addListener((observable, old, newValue) -> pControl.setText("" + newValue.doubleValue()));
         dVal.addListener((observable, old, newValue) -> dControl.setText("" + newValue.doubleValue()));
-
-        setPointControl.setOnAction(event -> pidObject.getEntry(SETPOINT_Key).setNumber(Double.parseDouble(setPointControl.getText())));
         setPointVal.addListener(((observable, oldValue, newValue) -> setPoint.setText("" + newValue)));
-
         errorVal.addListener(((observable, oldValue, newValue) -> error.setText("" + newValue)));
         //error val only updates from the network and is not mutable from driverStation
+
+
+        sendButton.setOnAction(event -> {
+            pidObject.getEntry(P_Key).setNumber(Double.parseDouble(pControl.getText()));
+            pidObject.getEntry(I_Key).setNumber(Double.parseDouble(iControl.getText()));
+            pidObject.getEntry(D_Key).setNumber(Double.parseDouble(dControl.getText()));
+            pidObject.getEntry(SETPOINT_Key).setNumber(Double.parseDouble(setPointControl.getText()));
+        });
+
+        colorMode.addListener(observable -> {
+                mainTitle.setTextFill(colorMode.getSecondaryColor());
+                pTitle.setTextFill(colorMode.getSecondaryColor());
+                iTitle.setTextFill(colorMode.getSecondaryColor());
+                dTitle.setTextFill(colorMode.getSecondaryColor());
+        });
+
     }
 
 }

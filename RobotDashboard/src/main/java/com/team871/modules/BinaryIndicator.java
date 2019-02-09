@@ -26,7 +26,7 @@ public class BinaryIndicator extends VBox {
 
         label = new Label("Title");
         label.setAlignment(Pos.CENTER);
-        label.setPadding(new Insets(5, 0, 3, 0));
+        label.setPadding(new Insets(5, 5, 5, 5));
 
         this.getChildren().addAll(label, circle);
         this.setAlignment(Pos.CENTER);
@@ -42,6 +42,7 @@ public class BinaryIndicator extends VBox {
      * @param data      the value this indicator will update to.
      */
     public void initialize(ColorMode colorMode, String title, IData<Boolean> data) {
+
 
         label.setText(title);
         label.setTextFill(colorMode.getSecondaryColor());
