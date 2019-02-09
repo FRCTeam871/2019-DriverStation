@@ -44,4 +44,9 @@ public class ColorModeController {
         colorMode.changeBaseColor();
     }
 
+    public void update(){
+        colorMode.changeBaseColor();
+        colorMode.changeBaseColor();
+    }
+
 }

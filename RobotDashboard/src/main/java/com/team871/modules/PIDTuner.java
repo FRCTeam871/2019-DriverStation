@@ -32,10 +32,10 @@ public class PIDTuner extends VBox {
     private Label dTitle;
     private TextField dControl;
 
-    private Label setPoint;
+    private Label setPointTitle;
     private TextField setPointControl;
 
-    private Label error;
+    private Label errorTitle;
     private TextField errorControl;
 
     private Button sendButton;
@@ -61,12 +61,12 @@ public class PIDTuner extends VBox {
         dControl = new TextField("0.00");
         dControl.setMaxWidth(50);
 
-        setPoint = new Label("SetPoint: ");
+        setPointTitle = new Label("SetPoint: ");
         setPointControl = new TextField("0.00");
         setPointControl.setMaxWidth(50);
         setPointControl.setEditable(false);
 
-        error = new Label("Error: ");
+        errorTitle = new Label("Error: ");
         errorControl = new TextField("0.00");
         errorControl.setMaxWidth(50);
         errorControl.setEditable(false);
@@ -77,8 +77,8 @@ public class PIDTuner extends VBox {
         dataGrid.addRow(0, pTitle, pControl);
         dataGrid.addRow(1, iTitle, iControl);
         dataGrid.addRow(2, dTitle, dControl);
-        dataGrid.addRow(3, setPoint, setPointControl);
-        dataGrid.addRow(4, error, errorControl);
+        dataGrid.addRow(3, setPointTitle, setPointControl);
+        dataGrid.addRow(4, errorTitle, errorControl);
         dataGrid.setAlignment(Pos.CENTER_LEFT);
         this.getChildren().addAll(mainTitle, dataGrid, sendButton);
         this.setAlignment(Pos.CENTER);
@@ -108,9 +108,9 @@ public class PIDTuner extends VBox {
         iVal.addListener((observable, old, newValue) -> iControl.setText("" + newValue.doubleValue()));
         pVal.addListener((observable, old, newValue) -> pControl.setText("" + newValue.doubleValue()));
         dVal.addListener((observable, old, newValue) -> dControl.setText("" + newValue.doubleValue()));
-        setPointVal.addListener(((observable, oldValue, newValue) -> setPoint.setText("" + newValue)));
-        errorVal.addListener(((observable, oldValue, newValue) -> error.setText("" + newValue)));
-        //error val only updates from the network and is not mutable from driverStation
+        setPointVal.addListener(((observable, oldValue, newValue) -> setPointTitle.setText("" + newValue)));
+        errorVal.addListener(((observable, oldValue, newValue) -> errorTitle.setText("" + newValue)));
+        //errorTitle val only updates from the network and is not mutable from driverStation
 
 
         sendButton.setOnAction(event -> {
@@ -125,6 +125,8 @@ public class PIDTuner extends VBox {
                 pTitle.setTextFill(colorMode.getSecondaryColor());
                 iTitle.setTextFill(colorMode.getSecondaryColor());
                 dTitle.setTextFill(colorMode.getSecondaryColor());
+                setPointTitle.setTextFill(colorMode.getSecondaryColor());
+                errorTitle.setTextFill(colorMode.getSecondaryColor());
         });
 
     }
