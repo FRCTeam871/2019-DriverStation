@@ -27,7 +27,7 @@ public class NumberGraph extends VBox {
 
         chart = new LineChart<>(xAxis, yAxis);
         chart.setPrefHeight(100);
-        chart.setPrefWidth(100);
+        chart.setPrefWidth(200);
 
 
         this.getChildren().addAll(chart);
