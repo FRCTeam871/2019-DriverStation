@@ -8,6 +8,7 @@ import com.team871.config.network.AbstractNetConfig;
 import com.team871.config.network.ArmstrongNetConfig;
 import com.team871.modules.BinaryIndicator;
 import com.team871.modules.CircleGraph;
+import com.team871.modules.NumberGraph;
 import com.team871.modules.PIDTuner;
 import com.team871.util.data.BinaryDataValue;
 import com.team871.util.data.NumericalDataValue;
@@ -30,6 +31,8 @@ public class TestScreenController {
     private CircleGraph circleGraph1;
     @FXML
     private PIDTuner pid1;
+    @FXML
+    private NumberGraph pid1Graph;
 
     private IDashboardConfig config;
     private NetworkTableInstance netTable;
@@ -43,8 +46,6 @@ public class TestScreenController {
         netConfig = new ArmstrongNetConfig(netTable, "0.0");
         colorMode = config.getColorMode();
         colorModeController = new ColorModeController(colorMode);
-
-
     }
 
 
@@ -54,6 +55,7 @@ public class TestScreenController {
         circleGraph1.initialize(colorMode, new NumericalDataValue(22.));
         circleGraph1.createBatteryRadialGraphBox();
         pid1.initialize(netTable.getTable("LOL_IDK"), colorMode);
+        pid1Graph.initialize(new NumericalDataValue(25.));
 
         colorModeController.update();
 
