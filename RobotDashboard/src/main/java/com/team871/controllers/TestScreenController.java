@@ -4,12 +4,8 @@ import com.team871.config.DefaultDashboardConfig;
 import com.team871.config.IDashboardConfig;
 import com.team871.config.Style.ColorMode;
 import com.team871.config.Style.ColorModeController;
-import com.team871.config.network.AbstractNetConfig;
 import com.team871.config.network.ArmstrongNetConfig;
-import com.team871.modules.BinaryIndicator;
-import com.team871.modules.CircleGraph;
-import com.team871.modules.NumberGraph;
-import com.team871.modules.PIDTuner;
+import com.team871.modules.*;
 import com.team871.util.data.BinaryDataValue;
 import com.team871.util.data.NumericalDataValue;
 import edu.wpi.first.networktables.NetworkTableInstance;
@@ -33,17 +29,20 @@ public class TestScreenController {
     private PIDTuner pid1;
     @FXML
     private NumberGraph pid1Graph;
+    @FXML
+    private ArmDisplay armDisplay;
+
 
     private IDashboardConfig config;
     private NetworkTableInstance netTable;
-    private AbstractNetConfig netConfig;
+    private ArmstrongNetConfig netConfig;
     private ColorMode colorMode;
     ColorModeController colorModeController;
 
     public TestScreenController() {
         config = new DefaultDashboardConfig();
         netTable = config.getNetworkTableInstance();
-        netConfig = new ArmstrongNetConfig(netTable, "0.0");
+        netConfig = new ArmstrongNetConfig(true, netTable, "0.0");
         colorMode = config.getColorMode();
         colorModeController = new ColorModeController(colorMode);
     }
@@ -56,6 +55,7 @@ public class TestScreenController {
         circleGraph1.createBatteryRadialGraphBox();
         pid1.initialize(netTable.getTable("LOL_IDK"), colorMode);
         pid1Graph.initialize(new NumericalDataValue(25.));
+        armDisplay.initialize(new NumericalDataValue(90.), new NumericalDataValue(90.), new NumericalDataValue(90.));
 
         colorModeController.update();
 
