@@ -29,13 +29,14 @@ public class NetNumericalDataValue extends NumericalDataValue implements IData<D
     public NetNumericalDataValue(NetworkTableEntry tableEntry) {
         super();
 
+        super.set(tableEntry.getDouble(-1.0));
+
         tableEntry.addListener(event -> {
             try {
                 super.set(event.value.getDouble());
             } catch (ClassCastException e) {
-                System.out.println("Table Entry(" + tableEntry.getInfo() + "): " + e.toString());
+                System.out.println("On Table Entry(" + tableEntry.getInfo() + "): " + e.toString());
             }
         }, EntryListenerFlags.kNew | EntryListenerFlags.kUpdate);
-        set(-1.);
     }
 }

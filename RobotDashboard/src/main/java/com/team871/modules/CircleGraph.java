@@ -22,6 +22,7 @@ public class CircleGraph extends VBox {
     private Gauge gauge;
     private ColorMode colorMode;
     private IData<Double> data;
+    private boolean isNormalized;
 
     public CircleGraph() {
         colorMode = new ColorMode(false);
@@ -52,31 +53,22 @@ public class CircleGraph extends VBox {
         this.setAlignment(Pos.CENTER);
     }
 
-    /**
-     * @param colorMode the color mode settings to be used in this Graph
-     * @param data      the data this graph will read from.
-     *                  sets the maximum size of this graph to 190 by default
-     */
-    public void initialize(ColorMode colorMode, IData<Double> data) {
-        initialize(colorMode, data, 130, 40);
-    }
 
     /**
      * @param colorMode     the color mode settings to be used in this Graph
      * @param data          the data this graph will read from.
-     * @param maxSideLength the maximum size of this graph
      */
-    public void initialize(ColorMode colorMode, IData<Double> data, double maxSideLength, double minSideLength) {
+    public void initialize(ColorMode colorMode, IData<Double> data) {
         this.colorMode = colorMode;
         this.data = data;
+
+        this.isNormalized = false;
 
         this.gauge = GaugeBuilder
                 .create()
                 .skinType(SkinType.BAR)
                 .title("Null")
                 .unit("Null")
-                .maxSize(maxSideLength, maxSideLength)
-                .minSize(minSideLength, minSideLength)
                 .scaleDirection(ScaleDirection.CLOCKWISE)
                 .thresholdVisible(true)
                 .thresholdColor(Color.YELLOW)
@@ -95,6 +87,8 @@ public class CircleGraph extends VBox {
         this.getChildren().addAll(gauge);
         this.setSpacing(.5);
         this.setAlignment(Pos.CENTER);
+        this.setPrefHeight(100);
+        this.setPrefWidth(100);
 
         //Updates:
         colorMode.addListener(observable -> {
@@ -104,7 +98,19 @@ public class CircleGraph extends VBox {
             gauge.setUnitColor(colorMode.getSecondaryColor());
         });
 
-        data.addListener((observable, old, newValue) -> gauge.setValue(newValue));
+
+        data.addListener((observable, old, newValue) -> {
+            if (isNormalized && data instanceof NumericalDataValue) {//don't worry this cast is 'safe'
+                gauge.setValue(newValue);
+                //gauge.setValue(((NumericalDataValue) data).getValue(gauge.getMaxValue(), gauge.getMinValue()) );
+            }
+            else {
+                gauge.setValue(newValue);
+            }
+        });
+
+        gauge.setValue(data.getValue());
+
     }
 
 
@@ -124,6 +130,16 @@ public class CircleGraph extends VBox {
         gauge.setMaxValue(100);
         gauge.setValue(data.getValue());
 
+    }
+
+    public void createRadialHeadingGraph(){
+        gauge.setTitle("Heading");
+        gauge.setUnit("deg");
+        gauge.setScaleDirection(ScaleDirection.CLOCKWISE);
+        gauge.setThresholdVisible(true);
+        gauge.setMinValue(0);
+        gauge.setMaxValue(360);
+        isNormalized = true;
     }
 
     /**

@@ -4,9 +4,8 @@ import com.team871.config.DefaultDashboardConfig;
 import com.team871.config.IDashboardConfig;
 import com.team871.config.Style.ColorMode;
 import com.team871.config.Style.ColorModeController;
-import com.team871.config.network.ArmstrongNetConfig;
+import com.team871.config.network.DeepSpaceNetworkVariables;
 import com.team871.modules.*;
-import com.team871.util.data.BinaryDataValue;
 import com.team871.util.data.NumericalDataValue;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import javafx.fxml.FXML;
@@ -35,14 +34,14 @@ public class TestScreenController {
 
     private IDashboardConfig config;
     private NetworkTableInstance netTable;
-    private ArmstrongNetConfig netConfig;
+    private DeepSpaceNetworkVariables netConfig;
     private ColorMode colorMode;
     ColorModeController colorModeController;
 
     public TestScreenController() {
-        config = new DefaultDashboardConfig();
+        config = new DefaultDashboardConfig(871);
         netTable = config.getNetworkTableInstance();
-        netConfig = new ArmstrongNetConfig(true, netTable, "0.0");
+        netConfig = new DeepSpaceNetworkVariables(true, netTable, "0.0");
         colorMode = config.getColorMode();
         colorModeController = new ColorModeController(colorMode);
     }
@@ -50,12 +49,13 @@ public class TestScreenController {
 
     @FXML
     private void initialize() {
-        binaryIndicator1.initialize(colorMode, "Test", new BinaryDataValue(true));
-        circleGraph1.initialize(colorMode, new NumericalDataValue(22.));
-        circleGraph1.createBatteryRadialGraphBox();
-        pid1.initialize(netTable.getTable("LOL_IDK"), colorMode);
+        binaryIndicator1.initialize(colorMode, "isGrabbing", netConfig.isGrabbing);
+        circleGraph1.initialize(colorMode, netConfig.heading);
+        circleGraph1.createRadialHeadingGraph();
+
+        pid1.initialize(netConfig.upperArmPID, colorMode);
         pid1Graph.initialize(new NumericalDataValue(25.));
-        armDisplay.initialize(new NumericalDataValue(90.), new NumericalDataValue(90.), new NumericalDataValue(90.));
+        armDisplay.initialize(netConfig.upperArmAngle, netConfig.lowerArmAngle, netConfig.wristAngle);
 
         colorModeController.update();
 

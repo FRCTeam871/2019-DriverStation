@@ -10,6 +10,7 @@ group 'com.team871'
 version '1.0-SNAPSHOT'
 
 def MAIN_CLASS = "com.team871.FXMLGraphicalMain"
+applicationDefaultJvmArgs = ["-Djava.library.path=../lib/natives/win/64"]
 
 application {
     mainClassName = MAIN_CLASS
@@ -31,11 +32,7 @@ repositories {
     mavenCentral()
     maven {
         url 'http://first.wpi.edu/FRC/roborio/maven/release'
-
     }
-//    flatDir {
-//        dirs "$rootDir/lib"
-//    }
 }
 
 
@@ -50,6 +47,7 @@ dependencies {
 
     testCompile group: 'junit', name: 'junit', version: '4.12'
 }
+
 
 // Setting up my Jar File. In this case, adding all libraries into the main jar ('fat jar')
 // in order to make them all available at runtime. Also adding the manifest so WPILib

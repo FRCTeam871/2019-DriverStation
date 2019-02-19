@@ -19,15 +19,18 @@ public class CameraServerSource {
     private Mat captureImg;
     private MatOfByte byteMat;
 
+    static{
+        System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
+    }
 
     public CameraServerSource(String sourceURL){
+
         if(cameraQuantity == null){
             cameraQuantity = -1;
         }
         cameraIndex = ++cameraQuantity;
 
 
-        System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
         vc = new VideoCapture();
         vc.open(sourceURL);
         captureImg = new Mat();
@@ -36,12 +39,18 @@ public class CameraServerSource {
         update();
         display = new Image("noCam.png");
 
-        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-            vc.release();
-            System.out.println(" \tCamera-" + cameraIndex + " shut-down");
-        }));
+        Runtime.getRuntime().addShutdownHook(new Thread(this::close));
     }
 
+    public void changeSource(String newSource){
+        vc.release();
+        vc.open(newSource);
+    }
+
+    public void changeSource(int index){
+        vc.release();
+        vc.open(index);
+    }
 
     public Image grabHerByThePu(){
         return display;
@@ -64,5 +73,10 @@ public class CameraServerSource {
         }else{
             return false;
         }
+    }
+
+    public void close(){
+        vc.release();
+        System.out.println(" \tCamera-" + cameraIndex + " shut-down");
     }
 }

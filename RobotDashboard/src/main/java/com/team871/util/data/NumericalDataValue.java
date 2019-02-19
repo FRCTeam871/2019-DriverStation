@@ -23,14 +23,14 @@ public class NumericalDataValue implements IData<Double> {
      * Value of the NumericalDataValue is set to 0 by default
      */
     protected NumericalDataValue() {
-        this(0.0, Double.MAX_VALUE - 1, Double.MIN_VALUE - 1);
+        this(0.0, Double.MAX_VALUE - 1, Double.MIN_VALUE + 1);
     }
 
     /**
      * @param value of the NumericalDataValue
      */
     public NumericalDataValue(Double value) {
-        this(value, Double.MAX_VALUE - 1, Double.MIN_VALUE - 1);
+        this(value, Double.MAX_VALUE - 1, Double.MIN_VALUE + 1);
     }
 
     /**
