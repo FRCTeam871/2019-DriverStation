@@ -40,7 +40,7 @@ public class CameraBox extends HBox {
         camHeight = cameraHeight;
 
        //source.changeSource("http://10.8.71.2:1181/?action=stream"); //TODO: Grab source URL from netTables instead of hardcode
-       source.changeSource(0);
+       source.changeSource(0); //Web Cam on driverStation.
 
         display.setFitHeight(camHeight);
         display.setFitWidth(camWidth);
