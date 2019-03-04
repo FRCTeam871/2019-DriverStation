@@ -1,4 +1,4 @@
-package com.team871.modules;
+package com.team871.modules.cameras;
 
 import javafx.scene.image.Image;
 import org.opencv.core.Core;
@@ -19,7 +19,7 @@ public class CameraServerSource {
     private Mat captureImg;
     private MatOfByte byteMat;
 
-    static{
+    static {
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
     }
 
@@ -41,6 +41,11 @@ public class CameraServerSource {
 
         Runtime.getRuntime().addShutdownHook(new Thread(this::close));
     }
+
+//    public void changeSource(ICamera newCamera){
+//        vc.release();
+//        vc.open(newCamera.getLocation().toString());
+//    }
 
     public void changeSource(String newSource){
         vc.release();

@@ -17,6 +17,10 @@ public class DefaultDashboardConfig implements IDashboardConfig {
     this("GUI_CLIENT", 871);
   }
 
+  /**
+   * A dashboard configuration filled with default values.
+   * @param teamNumber FRC team number to communicate on network.
+   */
   public DefaultDashboardConfig(int teamNumber) {
     this("GUI_CLIENT", teamNumber);
   }
@@ -28,7 +32,7 @@ public class DefaultDashboardConfig implements IDashboardConfig {
    * @param teamNumber the team number recognized by NetworkTables
    */
   public DefaultDashboardConfig(String networkID, int teamNumber) {
-    colorMode = new ColorMode(false);
+    colorMode = new ColorMode(true);
 
     networkTableInstance = NetworkTableInstance.getDefault();
     networkTableInstance.setNetworkIdentity(networkID);
@@ -47,11 +51,11 @@ public class DefaultDashboardConfig implements IDashboardConfig {
 
   @Override
   public int getInitialWidth() {
-    return 720;
+    return 1920;
   }
 
   @Override
   public int getInitialHeight() {
-    return 405;
+    return 1080;
   }
 }

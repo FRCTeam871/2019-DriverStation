@@ -17,6 +17,7 @@ public class BinaryIndicator extends VBox {
 
     private Circle circle;
     private Label label;
+    private boolean invert;
 
     public BinaryIndicator() {
 
@@ -35,17 +36,26 @@ public class BinaryIndicator extends VBox {
     }
 
     /**
-     * Will display a true or false status
-     *
-     * @param colorMode changes the font colors to match colorMode
-     * @param title     the title/name of the indicator
+     * Will display a true or false status.
+     * @param colorMode changes the font colors to match colorMode.
+     * @param title     the title/name of the indicator.
      * @param data      the value this indicator will update to.
      */
     public void initialize(ColorMode colorMode, String title, IData<Boolean> data) {
+        initialize(colorMode, title, data, false);
+    }
 
-
+    /**
+     * Will display a true or false status.
+     * @param colorMode changes the font colors to match colorMode.
+     * @param title     the title/name of the indicator.
+     * @param data      the value this indicator will update to.
+     * @param isInverted whether or not the data value will be inverted.
+     */
+    public void initialize(ColorMode colorMode, String title, IData<Boolean> data, boolean isInverted) {
         label.setText(title);
         label.setTextFill(colorMode.getSecondaryColor());
+        this.invert = isInverted;
 
         //Updates:
         colorMode.addListener(observable -> label.setTextFill(colorMode.getSecondaryColor()));
@@ -53,16 +63,18 @@ public class BinaryIndicator extends VBox {
         setState(data.getValue());
 
         data.addListener((observable, old, newValue) -> setState(newValue));
-    }
 
+    }
 
     /**
      * Sets the Indicator to On (GREEN color) or Off position (RED color)
      */
     private void setState(boolean on) {
+        if (invert)
+                on = !on;
+
         if (on)
             circle.setFill(Color.GREEN);
-
         else
             circle.setFill(Color.RED);
     }

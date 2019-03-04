@@ -1,6 +1,8 @@
 package com.team871.config.network;
 
 
+import com.team871.util.data.BinaryDataValue;
+import com.team871.util.data.IData;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 
@@ -19,28 +21,38 @@ public abstract class AbstractNetConfig {
   public final NetworkTableInstance networkTableInstance;
   public final String SERVER_VERSION_KEY = "SERVER_VERSION";
   public final String CLIENT_VERSION_KEY = "CLIENT_VERSION";
-  public final String NET_IDENTITY;
+  public final String IS_RED_TEAM_KEY  = "TODO";
+  public final String MATCH_NUMBER_KEY = "TODO";
+  public final String GAME_TIME_KEY    = "TODO";
 
+  public final String networkIdentity;
+  public IData<Boolean> isConected;
+
+  private Thread checkVersionThread;
 
   public AbstractNetConfig(boolean isClient, NetworkTableInstance instance, String VERSION_VAL) {
+    Runtime.getRuntime().addShutdownHook(new Thread(this::close));
     this.networkTableInstance = instance;
 
     if(isClient) {
-      NET_IDENTITY = "client";
-      instance.setNetworkIdentity(NET_IDENTITY);
+      networkIdentity = "client";
+      instance.setNetworkIdentity(networkIdentity);
     }
     else {
-      NET_IDENTITY = "server";
-      instance.setNetworkIdentity(NET_IDENTITY);
+      networkIdentity = "server";
+      instance.setNetworkIdentity(networkIdentity);
       instance.getEntry(SERVER_VERSION_KEY).setString(VERSION_VAL);
     }
 
+    boolean isConnecedtL = (instance.isConnected());
+    this.isConected = new BinaryDataValue(isConnecedtL);
 
     Runnable checkVersionTask = () ->{
       try {
-        Thread.sleep(500);
+        while(!instance.isConnected())
+          Thread.sleep(250);
       } catch (InterruptedException e) {
-        e.printStackTrace();
+//        e.printStackTrace();
       }
 
       System.out.println(" ");
@@ -53,16 +65,19 @@ public abstract class AbstractNetConfig {
           System.out.println("ERROR!! NetworkTables were not set correctly, clients will most likely not work in conjunction with this server");
       }else{
         System.out.println("NetworkTable connection started with no found problems");
-        System.out.println( NET_IDENTITY + " broadcasting with version: " + VERSION_VAL);
+        System.out.println( networkIdentity + " broadcasting with version: " + VERSION_VAL);
       }
+      this.isConected = new BinaryDataValue(instance.isConnected());
       System.out.println(" ");
       Thread.currentThread().stop();
     };
 
-    Thread checkVersionThread = new Thread(checkVersionTask);
+    checkVersionThread = new Thread(checkVersionTask);
     checkVersionThread.setDaemon(true);
     checkVersionThread.start();
+    //Fun fact #3064: you cant set Daemeon to true if you already started the thread.
 
+    Runtime.getRuntime().addShutdownHook(new Thread(this::close));
   }
 
 
@@ -73,5 +88,10 @@ public abstract class AbstractNetConfig {
 
   public abstract NetworkTable getTable();
 
+  private void close(){
+    if(checkVersionThread.isAlive()){
+      checkVersionThread.interrupt();
+    }
+  }
 
 }

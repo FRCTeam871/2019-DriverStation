@@ -43,6 +43,7 @@ dependencies {
 
     //compile 'edu.wpi.first.ntcore/ntcore-jni:2019.2.1.ntcore-jni-2019.2.1-all'
 
+    compile name: 'natives/win/64/cscore-jni-2019.1.1-beta-2-windowsx86-64'
     compile name: 'ntcore-jni-2019.2.1-all'
 
     testCompile group: 'junit', name: 'junit', version: '4.12'

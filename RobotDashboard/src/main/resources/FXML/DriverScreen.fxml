@@ -1,15 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 
-<?import com.team871.modules.CameraBox?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.HBox?>
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.team871.controllers.DriverScreenController">
+<?import com.team871.modules.ArmDisplay?>
+<?import com.team871.modules.BinaryIndicator?>
+<?import com.team871.modules.cameras.VideoDisplay?>
+<?import com.team871.modules.CircleGraph?>
+<?import javafx.scene.layout.*?>
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.team871.controllers.DriveScreenController">
    <children>
       <HBox>
-         <CameraBox fx:id="cameraBox1"/>
+         <VBox>
+            <CircleGraph fx:id="headingDisplay"/>
+            <ArmDisplay fx:id="armDisplay"/>
+            <HBox>
+               <BinaryIndicator fx:id="grabInSense"/>
+               <BinaryIndicator fx:id="grabOutSense"/>
+            </HBox>
+         </VBox>
 
+         <HBox>
+            <VideoDisplay fx:id="videoDisplay"/>
+
+         </HBox>
       </HBox>
-
    </children>
 </AnchorPane>

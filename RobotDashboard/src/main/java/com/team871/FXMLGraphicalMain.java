@@ -1,5 +1,8 @@
 package com.team871;
 
+import com.team871.config.DefaultDashboardConfig;
+import com.team871.config.IDashboardConfig;
+import com.team871.controllers.DisplayScreenController;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
@@ -8,6 +11,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.net.URL;
 
 /**
  * @project Robotics Dashboard
@@ -17,18 +21,29 @@ import java.io.IOException;
 
 public class FXMLGraphicalMain extends Application {
 
+    static final String FXML_FILENAME = "FXML/Display.fxml";
+    static final int TEAM_NUMBER = 871;
 
     @Override
     public void start(Stage primaryStage) {
         Parent root = null;
 
+        IDashboardConfig config = new DefaultDashboardConfig(TEAM_NUMBER);
+
         try {
-            root = FXMLLoader.load(getClass().getClassLoader().getResource("FXML/display.fxml"));
+            URL location = getClass().getClassLoader().getResource(FXML_FILENAME);
+            FXMLLoader loader = new FXMLLoader(location);
+            loader.setController(new DisplayScreenController(config));
+            root = loader.load();
         } catch (IOException e) {
             System.out.println("Failed to load the FXML file!");
+            e.printStackTrace();
+            stop();
+            return;
+
         }
 
-        primaryStage.setTitle("Test 1");
+        primaryStage.setTitle("Robot Dashboard");
         primaryStage.setScene(new Scene(root, 720, 480));
         primaryStage.show();
     }

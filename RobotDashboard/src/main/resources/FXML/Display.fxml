@@ -4,10 +4,9 @@
 <?import javafx.scene.effect.DropShadow?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
-<BorderPane xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="com.team871.controllers.DisplayScreenController">
+<BorderPane xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:id="background">
     <left>
-        <AnchorPane prefHeight="400.0" prefWidth="31.0" styleClass="root" BorderPane.alignment="CENTER">
+        <AnchorPane prefHeight="400.0" prefWidth="31.0" styleClass="root" BorderPane.alignment="CENTER" fx:id="menuBackground">
             <effect>
                 <DropShadow/>
             </effect>
@@ -24,12 +23,12 @@
             <tabs>
                 <Tab text="Not debug">
                     <content>
-                        <fx:include source="DriverScreen.fxml" />
+                        <fx:include fx:id="drive" source="DriverScreen.fxml"/>
                     </content>
                 </Tab>
                 <Tab text="Debug">
                     <content>
-                        <fx:include source="testScreen.fxml"/>
+                        <fx:include fx:id="debug" source="DebugScreen.fxml"/>
                     </content>
                 </Tab>
             </tabs>
