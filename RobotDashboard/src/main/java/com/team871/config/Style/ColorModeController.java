@@ -34,19 +34,19 @@ public class ColorModeController {
      * @param newPrimaryColor the new primary color
      */
     public void setPrimaryColor(Color newPrimaryColor) {
-        colorMode.setPrimaryColor(newPrimaryColor);
+        setPrimaryColor(newPrimaryColor);
     }
 
     /**
      * will invert the base color(dark or light).
      */
     public void changeBaseColor() {
-        colorMode.changeBaseColor();
+        changeBaseColor();
     }
 
     public void update(){
-        colorMode.changeBaseColor();
-        colorMode.changeBaseColor();
+        changeBaseColor();
+        changeBaseColor();
     }
 
 }

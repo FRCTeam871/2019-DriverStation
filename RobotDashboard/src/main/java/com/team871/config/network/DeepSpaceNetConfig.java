@@ -15,8 +15,6 @@ public class DeepSpaceNetConfig extends AbstractNetConfig {
     public final String TABLE_KEY;
 
     public final String CAMERAS_TABLE_KEY;
-    public final String CAMERA_0_TABLE;
-    public final String CAMERA_1_TABLE;
 
     public final String HEADING_KEY;
     public final String LOCATION_X_KEY;
@@ -45,8 +43,6 @@ public class DeepSpaceNetConfig extends AbstractNetConfig {
         TABLE_KEY = "ROBOT";
 
         CAMERAS_TABLE_KEY = "CameraPublisher";
-        CAMERA_0_TABLE = "USB Camera 0";
-        CAMERA_1_TABLE = "camera2";
 
         HEADING_KEY  = "headingAngle";
         LOCATION_X_KEY = "locationX";

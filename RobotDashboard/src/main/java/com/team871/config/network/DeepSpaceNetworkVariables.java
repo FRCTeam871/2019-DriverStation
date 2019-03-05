@@ -30,9 +30,6 @@ public class DeepSpaceNetworkVariables extends DeepSpaceNetConfig{
     public IData<Boolean> isVacuumInner;
 
     public NetworkTable camerasTable;
-    public NetworkTable camera0Table;
-
-
 
     public DeepSpaceNetworkVariables(boolean isClient, NetworkTableInstance instance, String VERSION_VAL) {
         super(isClient, instance, VERSION_VAL);
@@ -55,7 +52,6 @@ public class DeepSpaceNetworkVariables extends DeepSpaceNetConfig{
         isVacuumInner = new NetBinaryDataValue(getTable().getEntry(IS_VACUUM_INNER_KEY));
 
         camerasTable = instance.getTable(CAMERAS_TABLE_KEY);
-        camera0Table = camerasTable.getSubTable(CAMERA_0_TABLE);
     }
 
 }

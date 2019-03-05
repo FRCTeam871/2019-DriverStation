@@ -44,7 +44,7 @@ public class FXMLGraphicalMain extends Application {
         }
 
         primaryStage.setTitle("Robot Dashboard");
-        primaryStage.setScene(new Scene(root, 720, 480));
+        primaryStage.setScene(new Scene(root, config.getInitialWidth(), config.getInitialHeight()));
         primaryStage.show();
     }
 

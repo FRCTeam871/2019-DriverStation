@@ -88,7 +88,7 @@ public class ColorMode implements ObservableValue<ColorMode> {
     /**
      * @param newPrimaryColor the new primary color
      */
-    protected void setPrimaryColor(Color newPrimaryColor) {
+    private void setPrimaryColor(Color newPrimaryColor) {
         this.primaryColor = newPrimaryColor;
         notifyInvalidationListeners();
         notifyChangeListeners(null);
@@ -98,7 +98,7 @@ public class ColorMode implements ObservableValue<ColorMode> {
     /**
      * will invert the color mode(dark or light).
      */
-    protected void changeBaseColor() {
+    private void changeBaseColor() {
         darkMode = !darkMode;
         notifyInvalidationListeners();
         notifyChangeListeners(null);

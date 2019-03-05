@@ -45,12 +45,14 @@ public class DisplayScreenController {
     @FXML
     void initialize(){
         DeepSpaceNetworkVariables networkVariables = new DeepSpaceNetworkVariables(true, config.getNetworkTableInstance(), "0.00");
-//        background.setBackground(new Background(new BackgroundFill(Color.CORNFLOWERBLUE, CornerRadii.EMPTY, Insets.EMPTY)));
-        background    .setBackground(new Background(new BackgroundFill(config.getColorMode().getBackgroundColor(), CornerRadii.EMPTY, Insets.EMPTY)));
-        menuBackground.setBackground(new Background(new BackgroundFill(config.getColorMode().getBackgroundColor(), CornerRadii.EMPTY, Insets.EMPTY)));
+        Background backgroundConf = new Background(new BackgroundFill(config.getColorMode().getBackgroundColor(), CornerRadii.EMPTY, Insets.EMPTY));
+        background.setBackground(backgroundConf);
+        menuBackground.setBackground(backgroundConf);
 
         debugController.initialize(config, networkVariables);
         driveController.initialize(config, networkVariables);
+        driveBtn.setBackground(backgroundConf);
+        debugBtn.setBackground(backgroundConf);
     }
 
     @FXML

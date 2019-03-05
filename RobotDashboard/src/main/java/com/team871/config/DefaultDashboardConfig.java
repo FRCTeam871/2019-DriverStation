@@ -51,11 +51,11 @@ public class DefaultDashboardConfig implements IDashboardConfig {
 
   @Override
   public int getInitialWidth() {
-    return 1920;
+    return 1280;
   }
 
   @Override
   public int getInitialHeight() {
-    return 1080;
+    return 720;
   }
 }

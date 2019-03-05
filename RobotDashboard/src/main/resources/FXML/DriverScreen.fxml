@@ -11,11 +11,11 @@
       <HBox>
          <VBox>
             <CircleGraph fx:id="headingDisplay"/>
-            <ArmDisplay fx:id="armDisplay"/>
-            <HBox>
+            <HBox fx:id="grabSenseBox">
                <BinaryIndicator fx:id="grabInSense"/>
                <BinaryIndicator fx:id="grabOutSense"/>
             </HBox>
+            <ArmDisplay fx:id="armDisplay"/>
          </VBox>
 
          <HBox>

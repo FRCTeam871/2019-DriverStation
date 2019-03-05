@@ -7,6 +7,7 @@ import eu.hansolo.medusa.Gauge;
 import eu.hansolo.medusa.Gauge.ScaleDirection;
 import eu.hansolo.medusa.Gauge.SkinType;
 import eu.hansolo.medusa.GaugeBuilder;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -87,9 +88,9 @@ public class CircleGraph extends VBox {
         this.getChildren().addAll(gauge);
         this.setSpacing(.5);
         this.setAlignment(Pos.CENTER);
-        this.setPrefHeight(100);
-        this.setPrefWidth(100);
-
+        this.setPrefHeight(150);
+        this.setPrefWidth(150);
+        this.setPadding(new Insets(8));
         //Updates:
         colorMode.addListener(observable -> {
             gauge.setBarColor(colorMode.getPrimaryColor());
