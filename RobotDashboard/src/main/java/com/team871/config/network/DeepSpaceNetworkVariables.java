@@ -35,21 +35,21 @@ public class DeepSpaceNetworkVariables extends DeepSpaceNetConfig{
         super(isClient, instance, VERSION_VAL);
 
 
-        heading   = new NetNumericalDataValue(getTable().getEntry(HEADING_KEY),361, -361);
-        locationX = new NetNumericalDataValue(getTable().getEntry(LOCATION_X_KEY));
-        locationY = new NetNumericalDataValue(getTable().getEntry(LOCATION_Y_KEY));
+        heading   = new NetNumericalDataValue(getDefaultTable().getEntry(HEADING_KEY),361, -361);
+        locationX = new NetNumericalDataValue(getDefaultTable().getEntry(LOCATION_X_KEY));
+        locationY = new NetNumericalDataValue(getDefaultTable().getEntry(LOCATION_Y_KEY));
 
-        upperArmAngle = new NetNumericalDataValue(getTable().getEntry(UPPER_ARM_ANGLE_KEY));
-        lowerArmAngle = new NetNumericalDataValue(getTable().getEntry(LOWER_ARM_ANGLE_KEY));
-        wristAngle    = new NetNumericalDataValue(getTable().getEntry(WRIST_ANGLE_KEY));
+        upperArmAngle = new NetNumericalDataValue(getDefaultTable().getEntry(UPPER_ARM_ANGLE_KEY));
+        lowerArmAngle = new NetNumericalDataValue(getDefaultTable().getEntry(LOWER_ARM_ANGLE_KEY));
+        wristAngle    = new NetNumericalDataValue(getDefaultTable().getEntry(WRIST_ANGLE_KEY));
 
-        upperArmPID = getTable().getSubTable(UPPER_ARM_PID_KEY);
-        lowerArmPID = getTable().getSubTable(LOWER_ARM_PID_KEY);
-        wristPID = getTable().getSubTable(WRIST_PID_KEY);
+        upperArmPID = getDefaultTable().getSubTable(UPPER_ARM_PID_KEY);
+        lowerArmPID = getDefaultTable().getSubTable(LOWER_ARM_PID_KEY);
+        wristPID = getDefaultTable().getSubTable(WRIST_PID_KEY);
 
-        isGrabbing = new NetBinaryDataValue(getTable().getEntry(IS_GRABBING_KEY));
-        isVacuumOn = new NetBinaryDataValue(getTable().getEntry(IS_VACUUM_ON_KEY));
-        isVacuumInner = new NetBinaryDataValue(getTable().getEntry(IS_VACUUM_INNER_KEY));
+        isGrabbing = new NetBinaryDataValue(getDefaultTable().getEntry(IS_GRABBING_KEY));
+        isVacuumOn = new NetBinaryDataValue(getDefaultTable().getEntry(IS_VACUUM_ON_KEY));
+        isVacuumInner = new NetBinaryDataValue(getDefaultTable().getEntry(IS_VACUUM_INNER_KEY));
 
         camerasTable = instance.getTable(CAMERAS_TABLE_KEY);
     }

@@ -1,4 +1,4 @@
-package com.team871.modules.cameras;
+package com.team871.modules.camera;
 
 import edu.wpi.cscore.CvSink;
 import edu.wpi.cscore.HttpCamera;
@@ -73,7 +73,7 @@ public class VideoDisplay extends VBox {
         display.setFitHeight(camHeight);
         display.setFitWidth(camWidth);
 
-//        WindowsUsbCameraWrapper usbCameraWrapper = new WindowsUsbCameraWrapper(0);
+        WindowsUsbCameraWrapper usbCameraWrapper = new WindowsUsbCameraWrapper(0);
 
         findCameras();
 

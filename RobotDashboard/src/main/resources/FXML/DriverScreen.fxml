@@ -3,7 +3,7 @@
 
 <?import com.team871.modules.ArmDisplay?>
 <?import com.team871.modules.BinaryIndicator?>
-<?import com.team871.modules.cameras.VideoDisplay?>
+<?import com.team871.modules.camera.VideoDisplay?>
 <?import com.team871.modules.CircleGraph?>
 <?import javafx.scene.layout.*?>
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.team871.controllers.DriveScreenController">

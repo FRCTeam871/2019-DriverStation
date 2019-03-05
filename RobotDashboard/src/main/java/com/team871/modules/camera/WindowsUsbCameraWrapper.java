@@ -1,4 +1,4 @@
-package com.team871.modules.cameras;
+package com.team871.modules.camera;
 
 import edu.wpi.cscore.CvSource;
 import edu.wpi.cscore.VideoMode;

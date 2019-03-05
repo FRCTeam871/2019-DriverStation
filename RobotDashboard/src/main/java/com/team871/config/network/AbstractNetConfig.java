@@ -1,8 +1,6 @@
 package com.team871.config.network;
 
 
-import com.team871.util.data.BinaryDataValue;
-import com.team871.util.data.IData;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 
@@ -18,16 +16,21 @@ import edu.wpi.first.networktables.NetworkTableInstance;
  */
 public abstract class AbstractNetConfig {
 
-  public final NetworkTableInstance networkTableInstance;
+  private final NetworkTableInstance networkTableInstance;
   public final String SERVER_VERSION_KEY = "SERVER_VERSION";
   public final String CLIENT_VERSION_KEY = "CLIENT_VERSION";
-  public final String IS_RED_TEAM_KEY  = "TODO";
-  public final String MATCH_NUMBER_KEY = "TODO";
-  public final String GAME_TIME_KEY    = "TODO";
+
+  public final String FMS_TABLE_KEY             = "FMSInfo";
+  public final String EVENT_NAME_KEY            = "EventName";
+  public final String GAMES_SPECFIC_MESSAGE_KEY = "GameSpecificMessage";
+  public final String IS_RED_TEAM_KEY           = "IsRedAlliance";
+  public final String MATCH_NUMBER_KEY          = "MatchNumber";
+  public final String MATCH_TYPE_KEY            = "MatchType";
+  public final String REPLAY_NUMBER_KEY         = "ReplayNumber";
+  public final String STATION_NUMBER_KEY        = "StationNumber";
+  public final String GAME_TIME_KEY             = "TODO"; //TODO: find value
 
   public final String networkIdentity;
-  public IData<Boolean> isConected;
-
   private Thread checkVersionThread;
 
   public AbstractNetConfig(boolean isClient, NetworkTableInstance instance, String VERSION_VAL) {
@@ -43,9 +46,6 @@ public abstract class AbstractNetConfig {
       instance.setNetworkIdentity(networkIdentity);
       instance.getEntry(SERVER_VERSION_KEY).setString(VERSION_VAL);
     }
-
-    boolean isConnecedtL = (instance.isConnected());
-    this.isConected = new BinaryDataValue(isConnecedtL);
 
     Runnable checkVersionTask = () ->{
       try {
@@ -67,10 +67,10 @@ public abstract class AbstractNetConfig {
         System.out.println("NetworkTable connection started with no found problems");
         System.out.println( networkIdentity + " broadcasting with version: " + VERSION_VAL);
       }
-      this.isConected = new BinaryDataValue(instance.isConnected());
-      System.out.println(" ");
-      Thread.currentThread().stop();
+      System.out.println(" \n");
+      Thread.currentThread().interrupt();
     };
+    //Runs until it can find the server.
 
     checkVersionThread = new Thread(checkVersionTask);
     checkVersionThread.setDaemon(true);
@@ -86,7 +86,12 @@ public abstract class AbstractNetConfig {
     return networkTableInstance;
   }
 
-  public abstract NetworkTable getTable();
+  public boolean isConnected(){
+    return getInstance().isConnected();
+  }
+
+  public abstract NetworkTable getDefaultTable();
+
 
   private void close(){
     if(checkVersionThread.isAlive()){

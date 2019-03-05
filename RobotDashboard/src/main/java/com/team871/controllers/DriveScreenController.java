@@ -6,7 +6,7 @@ import com.team871.config.network.DeepSpaceNetworkVariables;
 import com.team871.modules.ArmDisplay;
 import com.team871.modules.BinaryIndicator;
 import com.team871.modules.CircleGraph;
-import com.team871.modules.cameras.VideoDisplay;
+import com.team871.modules.camera.VideoDisplay;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.layout.HBox;

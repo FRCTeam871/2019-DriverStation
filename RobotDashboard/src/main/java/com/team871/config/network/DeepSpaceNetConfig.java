@@ -63,7 +63,7 @@ public class DeepSpaceNetConfig extends AbstractNetConfig {
     }
 
     @Override
-    public NetworkTable getTable(){
+    public NetworkTable getDefaultTable(){
         return super.getInstance().getTable(TABLE_KEY);
     }
 
