@@ -73,7 +73,7 @@ public class VideoDisplay extends VBox {
         display.setFitHeight(camHeight);
         display.setFitWidth(camWidth);
 
-        WindowsUsbCameraWrapper usbCameraWrapper = new WindowsUsbCameraWrapper(0);
+//        WindowsUsbCameraWrapper usbCameraWrapper = new WindowsUsbCameraWrapper(0);
 
         findCameras();
 

@@ -37,6 +37,7 @@ public class DefaultDashboardConfig implements IDashboardConfig {
     networkTableInstance = NetworkTableInstance.getDefault();
     networkTableInstance.setNetworkIdentity(networkID);
     networkTableInstance.startClientTeam(teamNumber);
+    networkTableInstance.startClient("localhost");
   }
 
   @Override

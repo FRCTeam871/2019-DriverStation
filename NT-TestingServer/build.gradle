@@ -1,16 +1,50 @@
+import edu.wpi.first.gradlerio.GradleRIOPlugin
+
 plugins {
-    id 'java'
+    id "java"
+    id "application"
+    id 'org.openjfx.javafxplugin' version '0.0.6'
+    id "edu.wpi.first.GradleRIO" version "2019.1.1"
 }
 
 group 'com.team871'
-version 'unspecified'
+version '1.0-SNAPSHOT'
+
+def MAIN_CLASS = "com.team871.Main"
+applicationDefaultJvmArgs = ["-Djava.library.path=../lib/natives/win/64"]
+
+application {
+    mainClassName = MAIN_CLASS
+}
+
+javafx {
+
+    modules = [ 'javafx.controls', 'javafx.media' ,'javafx.graphics', 'javafx.fxml', ]
+
+}
 
 sourceCompatibility = 1.8
 
 repositories {
     mavenCentral()
+    maven {
+        url 'http://first.wpi.edu/FRC/roborio/maven/release'
+    }
 }
 
 dependencies {
+    compile wpi.deps.wpilib()
+    compile name: 'natives/win/64/cscore-jni-2019.1.1-beta-2-windowsx86-64'
+    compile name: 'ntcore-jni-2019.2.1-all'
+
     testCompile group: 'junit', name: 'junit', version: '4.12'
+}
+
+jar {
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    manifest GradleRIOPlugin.javaManifest(MAIN_CLASS)
+}
+
+manifest {
+    attributes('Main-Class': MAIN_CLASS)
 }
