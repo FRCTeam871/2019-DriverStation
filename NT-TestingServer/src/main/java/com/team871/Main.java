@@ -34,7 +34,7 @@ public class Main extends Application {
             return;
         }
 
-        primaryStage.setTitle("Robot Dashboard");
+        primaryStage.setTitle("Network Tables Testing Server");
         primaryStage.setScene(new Scene(root, GUI_WIDTH, GUI_HEIGHT));
         primaryStage.show();
     }

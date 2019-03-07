@@ -48,7 +48,6 @@ public class WindowsUsbCameraWrapper {
             Mat captureImg = new Mat();
             while (true) {
                 startT = System.currentTimeMillis();
-                System.out.println("looopy");
                 videoCapture.read(captureImg);
                 cvSource.putFrame(captureImg);
                 try {

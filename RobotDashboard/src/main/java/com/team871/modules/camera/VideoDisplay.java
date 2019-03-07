@@ -1,5 +1,7 @@
 package com.team871.modules.camera;
 
+import com.team871.modules.camera.process.LineDetectPipelineWrapper;
+import com.team871.modules.camera.process.VisionProccessor;
 import edu.wpi.cscore.CameraServerJNI;
 import edu.wpi.cscore.CvSink;
 import edu.wpi.cscore.HttpCamera;
@@ -38,6 +40,8 @@ public class VideoDisplay extends VBox {
     private int cameraListIndex;
     private double FPS;
 
+    private VisionProccessor visionProccessor;
+
     static{
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
     }
@@ -48,8 +52,8 @@ public class VideoDisplay extends VBox {
         camHeight = 480;
 
         currentCameraName = new Label("Camera Source: not found");
-        currentCameraDataRate = new Label();
-        currentCameraResolution = new Label();
+        currentCameraDataRate = new Label("null");
+        currentCameraResolution = new Label("null");
         currentCameraInfoBox = new HBox(currentCameraName, currentCameraDataRate, currentCameraResolution);
 
         display = new ImageView(img);
@@ -86,7 +90,14 @@ public class VideoDisplay extends VBox {
             Mat captureImg = new Mat();
             MatOfByte byteMat = new MatOfByte();
 
+
+            visionProccessor = new VisionProccessor(cvsink, (pipeline -> {
+                //Publishing the data to places goes here.
+            }) , new LineDetectPipelineWrapper());
+
             changeSinkSource(cameraListIndex);
+
+            visionProccessor.start();
 
             while (true) {
                 startT = System.currentTimeMillis();
@@ -145,9 +156,7 @@ public class VideoDisplay extends VBox {
 //                FPS = cvsink.getSource().getVideoMode().fps;
                 // for some reason this is only returning 0. will use default
 
-                Platform.runLater(() -> {
-                    updateCameraInfo();
-                });
+                Platform.runLater(this::updateCameraInfo);
 
             }
         }
