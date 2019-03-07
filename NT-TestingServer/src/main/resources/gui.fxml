@@ -1,0 +1,6 @@
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.AnchorPane?>
+<AnchorPane
+            xmlns:fx="http://javafx.com/fxml" >
+       <Button fx:id="toggleServerButton" mnemonicParsing="false" onAction="#toggleServerAction" text="Drive"/>
+</AnchorPane>

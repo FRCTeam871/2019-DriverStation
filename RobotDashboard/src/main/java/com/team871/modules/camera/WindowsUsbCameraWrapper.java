@@ -5,7 +5,6 @@ import edu.wpi.cscore.VideoMode;
 import edu.wpi.first.cameraserver.CameraServer;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
-import org.opencv.core.MatOfByte;
 import org.opencv.videoio.VideoCapture;
 
 /**
@@ -33,18 +32,17 @@ public class WindowsUsbCameraWrapper {
         instanceIndex = instanceQuantity;
 
         //Statics
-        FPS = 30;
+        FPS = 60;
 
         //CV objects
+        CameraServer cameraServer = CameraServer.getInstance();
         videoCapture = new VideoCapture(usbIndex);
         cvSource = new CvSource(("WinUSBCam" + instanceQuantity), new VideoMode(VideoMode.PixelFormat.kMJPEG, 1280, 720, (int) FPS));
-
-
+        cameraServer.startAutomaticCapture(cvSource);
 
         Runnable videoUpdateTask = () -> {
             long startT;
             Mat captureImg = new Mat();
-            MatOfByte byteMat = new MatOfByte();
             while (true) {
                 startT = System.currentTimeMillis();
                 videoCapture.read(captureImg);
@@ -60,9 +58,6 @@ public class WindowsUsbCameraWrapper {
         Thread videoUpdateThread = new Thread(videoUpdateTask);
         videoUpdateThread.setDaemon(true);
         videoUpdateThread.start();
-
-        CameraServer cameraServer = CameraServer.getInstance();
-        cameraServer.addCamera(cvSource);
 
         Runtime.getRuntime().addShutdownHook(new Thread(this::close));
     }

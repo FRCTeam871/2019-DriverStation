@@ -1,14 +1,16 @@
 package com.team871.modules.camera;
 
+import edu.wpi.cscore.CameraServerJNI;
 import edu.wpi.cscore.CvSink;
 import edu.wpi.cscore.HttpCamera;
 import edu.wpi.cscore.VideoCamera;
 import edu.wpi.first.networktables.NetworkTable;
+import javafx.application.Platform;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfByte;
@@ -22,7 +24,10 @@ import java.util.Set;
 public class VideoDisplay extends VBox {
 
     private ImageView display;
+    private HBox currentCameraInfoBox;
     private Label currentCameraName;
+    private Label currentCameraResolution;
+    private Label currentCameraDataRate;
 
     private double camHeight;
     private double camWidth;
@@ -31,7 +36,6 @@ public class VideoDisplay extends VBox {
     private NetworkTable camerasTable;
     private  List<VideoCamera> cameraList;
     private int cameraListIndex;
-    private boolean sinkSourceChange;
     private double FPS;
 
     static{
@@ -44,12 +48,14 @@ public class VideoDisplay extends VBox {
         camHeight = 480;
 
         currentCameraName = new Label("Camera Source: not found");
-        currentCameraName.setTextFill(Color.WHITE);
+        currentCameraDataRate = new Label();
+        currentCameraResolution = new Label();
+        currentCameraInfoBox = new HBox(currentCameraName, currentCameraDataRate, currentCameraResolution);
 
         display = new ImageView(img);
         display.setFitHeight(camHeight);
         display.setFitWidth(camWidth);
-        getChildren().addAll(display, currentCameraName);
+        getChildren().addAll(display, currentCameraInfoBox);
 
 
         display.setImage(img);
@@ -73,13 +79,10 @@ public class VideoDisplay extends VBox {
         display.setFitHeight(camHeight);
         display.setFitWidth(camWidth);
 
-//        WindowsUsbCameraWrapper usbCameraWrapper = new WindowsUsbCameraWrapper(0);
-
-        findCameras();
+        CameraServerJNI.setTelemetryPeriod(1);
 
         Runnable videoUpdateTask = () -> {
             long startT;
-            long intervalCount;
             Mat captureImg = new Mat();
             MatOfByte byteMat = new MatOfByte();
 
@@ -88,10 +91,7 @@ public class VideoDisplay extends VBox {
             while (true) {
                 startT = System.currentTimeMillis();
 
-                if(sinkSourceChange){
-                    changeSinkSource(cameraListIndex);
-                    sinkSourceChange = false;
-                }
+                changeSinkSource(cameraListIndex);
 
                 if(!cameraList.isEmpty()) {
                     if (cvsink.getSource().isValid()) {
@@ -100,11 +100,17 @@ public class VideoDisplay extends VBox {
                         //grabbing from video source
 
                         display.setImage(new Image(new ByteArrayInputStream(byteMat.toArray())));
-                        currentCameraName.setText(cameraList.get(0).getName());
                         //setting the source to JavaFX display
+                    } else {
+                        System.out.println("non-valid camera!" + cameraListIndex);
+//                        findCameras();
+                        try {
+                            Thread.sleep(2000);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
                     }
-                }
-                else {
+                } else {
                     System.out.println("No camera's found");
                     findCameras();
                     try {
@@ -119,6 +125,7 @@ public class VideoDisplay extends VBox {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
+
             }
         };
 
@@ -126,7 +133,7 @@ public class VideoDisplay extends VBox {
         displayUpdateThread.setDaemon(true);
         displayUpdateThread.start();
 
-        camerasTable.addSubTableListener((event, parentName, table ) -> findCameras(), false);
+        camerasTable.addSubTableListener((event, parentName, table ) -> findCameras(), true);
     }
 
 
@@ -134,21 +141,45 @@ public class VideoDisplay extends VBox {
         cameraListIndex = newIndex;
         if(!cameraList.isEmpty()) {
             cvsink.setSource(cameraList.get(cameraListIndex));
-            if (cvsink.getSource().isValid())
-                System.out.println(cvsink.getSource().getVideoMode().fps);
+            if (cvsink.getSource().isValid()) {
 //                FPS = cvsink.getSource().getVideoMode().fps;
+                // for some reason this is only returning 0. will use default
+
+                Platform.runLater(() -> {
+                    updateCameraInfo();
+                });
+
+            }
         }
     }
 
+    private void updateCameraInfo(){
+        VideoCamera current = cameraList.get(cameraListIndex);
+        currentCameraName.setText(current.getName() + ": " +  current.getDescription());
+//        currentCameraDataRate.setText("" + current.getActualDataRate());
+//        currentCameraResolution.setText("" + current.getVideoMode().width + " x " + current.getVideoMode().height);
+    }
+
     private void findCameras(){
+        if (camerasTable.getSubTables().isEmpty())
+            return;
+
+        System.out.println("Commencing Search for cameras: ");
+
         Set<String> camerasFound = camerasTable.getSubTables();
         for(String tableKey: camerasFound){
-            String location = camerasTable.getSubTable(tableKey).getEntry("streams").getStringArray(new String[]{"notFound"})[1];
+            String[] foundLocations = camerasTable.getSubTable(tableKey).getEntry("streams").getStringArray(new String[]{"notFound"});
+            String location = foundLocations[0];;
+            if (foundLocations.length == 2){
+                location = foundLocations[1];
+            }
+            //do this to avoid it trying to resolve RobotRio ip from dns
             location = location.substring(location.indexOf(':')+1);
-            System.out.println(location);
+            System.out.println("\t Found camera at: " + location);
             HttpCamera camera = new HttpCamera(("camera " +System.currentTimeMillis()), location);
             cameraList.add(camera);
         }
+        System.out.println( );
     }
 
     private void close(){
