@@ -20,9 +20,12 @@ public class WindowsUsbCameraWrapper {
     private int instanceIndex;
 
     private final double FPS;
+    private CameraServer cameraServer;
+
     private VideoCapture videoCapture;
     private CvSource cvSource;
 
+    private Thread videoUpdateThread;
 
     public WindowsUsbCameraWrapper(int usbIndex) {
         if(instanceQuantity == null)
@@ -35,7 +38,7 @@ public class WindowsUsbCameraWrapper {
         FPS = 60;
 
         //CV objects
-        CameraServer cameraServer = CameraServer.getInstance();
+        cameraServer = CameraServer.getInstance();
         videoCapture = new VideoCapture(usbIndex);
         cvSource = new CvSource(("WinUSBCam" + instanceQuantity), new VideoMode(VideoMode.PixelFormat.kMJPEG, 1280, 720, (int) FPS));
         cameraServer.startAutomaticCapture(cvSource);
@@ -45,17 +48,19 @@ public class WindowsUsbCameraWrapper {
             Mat captureImg = new Mat();
             while (true) {
                 startT = System.currentTimeMillis();
+                System.out.println("looopy");
                 videoCapture.read(captureImg);
                 cvSource.putFrame(captureImg);
                 try {
                     final long sleepMillis = (long) ((1000.0 / FPS) - (System.currentTimeMillis() - startT));
                     Thread.sleep(Math.max(sleepMillis, 0));
                 } catch (InterruptedException e) {
-                    e.printStackTrace();
+
                 }
             }
         };
-        Thread videoUpdateThread = new Thread(videoUpdateTask);
+
+        videoUpdateThread = new Thread(videoUpdateTask);
         videoUpdateThread.setDaemon(true);
         videoUpdateThread.start();
 
@@ -67,6 +72,9 @@ public class WindowsUsbCameraWrapper {
     }
 
     public void close(){
+        videoUpdateThread.interrupt();
+        cameraServer.getServer().close();
+        cvSource.close();
         videoCapture.release();
         System.out.println(" \tWindowsUsbCameraWrapper-" + instanceIndex + " shut-down");
     }
