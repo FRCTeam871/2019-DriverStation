@@ -8,6 +8,7 @@ public class TimmedLoopThread implements Runnable{
 
     private Runnable runnable;
     private long rate;
+    private boolean doDebugPrint;
 
 
     /**
@@ -18,6 +19,12 @@ public class TimmedLoopThread implements Runnable{
     public TimmedLoopThread(Runnable runnable, long rate){
         this.runnable = runnable;
         this.rate = rate;
+
+        this.doDebugPrint = false;
+    }
+
+    public void doDebugPrint(boolean doDebugPrint){
+        this.doDebugPrint = doDebugPrint;
     }
 
     @Override
@@ -29,8 +36,10 @@ public class TimmedLoopThread implements Runnable{
             runnable.run();
 
             try {
-                final long sleepMillis = (rate - (System.currentTimeMillis() - startT));
+                final long sleepMillis = (1000/rate - (System.currentTimeMillis() - startT));
                 Thread.sleep(Math.max(sleepMillis, 0));
+                if (doDebugPrint)
+                    System.out.println("Met target loop rate of " + rate + " (" + 1000/rate + "ms) by: " + sleepMillis +"ms");
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

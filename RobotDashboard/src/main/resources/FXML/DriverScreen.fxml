@@ -3,6 +3,7 @@
 
 <?import com.team871.modules.ArmDisplay?>
 <?import com.team871.modules.BinaryIndicator?>
+<?import com.team871.modules.camera.process.VisionProcessConfigurator?>
 <?import com.team871.modules.camera.VideoDisplay?>
 <?import com.team871.modules.CircleGraph?>
 <?import javafx.scene.layout.*?>
@@ -16,6 +17,7 @@
                <BinaryIndicator fx:id="grabOutSense"/>
             </HBox>
             <ArmDisplay fx:id="armDisplay"/>
+            <VisionProcessConfigurator fx:id="visionProcessConfigurator" />
          </VBox>
 
          <HBox>

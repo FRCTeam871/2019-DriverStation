@@ -50,7 +50,7 @@ public abstract class AbstractNetConfig {
     Runnable checkVersionTask = () ->{
       try {
         while(!instance.isConnected())
-          Thread.sleep(250);
+          Thread.sleep(50);
       } catch (InterruptedException e) {
 //        e.printStackTrace();
       }

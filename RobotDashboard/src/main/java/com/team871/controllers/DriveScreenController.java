@@ -7,6 +7,10 @@ import com.team871.modules.ArmDisplay;
 import com.team871.modules.BinaryIndicator;
 import com.team871.modules.CircleGraph;
 import com.team871.modules.camera.VideoDisplay;
+import com.team871.modules.camera.process.FindLineVissionProcess;
+import com.team871.modules.camera.process.LineDetectPipelineWrapper;
+import com.team871.modules.camera.process.VisionProcessConfigurator;
+import com.team871.modules.camera.process.VisionProcessor;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.layout.HBox;
@@ -29,6 +33,8 @@ public class DriveScreenController {
     BinaryIndicator grabInSense;
     @FXML
     BinaryIndicator grabOutSense;
+    @FXML
+    VisionProcessConfigurator visionProcessConfigurator;
 
     private DeepSpaceNetworkVariables netConfig;
     private ColorMode colorMode;
@@ -41,7 +47,7 @@ public class DriveScreenController {
         this.netConfig = netConfig;
         colorMode = config.getColorMode();
 
-        videoDisplay.initialize(netConfig.camerasTable,480, 720);
+        videoDisplay.initialize(netConfig.camerasTable,480, 720, colorMode);
 
         armDisplay.initialize(netConfig.upperArmAngle, netConfig.lowerArmAngle, netConfig.wristAngle);
 
@@ -53,5 +59,8 @@ public class DriveScreenController {
         grabSenseBox.setAlignment(Pos.CENTER);
         grabInSense.initialize (colorMode, "Inner Succ", netConfig.isVacuumInner);
         grabOutSense.initialize(colorMode, "Outer Succ", netConfig.isVacuumInner, true);
+
+        VisionProcessor visionProcessor = new VisionProcessor(new FindLineVissionProcess(netConfig.getDefaultTable().getSubTable("GRIP")), new LineDetectPipelineWrapper());
+        visionProcessConfigurator.initialize(netConfig.camerasTable, visionProcessor);
     }
 }
