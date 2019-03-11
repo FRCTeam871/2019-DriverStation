@@ -1,5 +1,6 @@
 package com.team871.modules.camera;
 
+import com.team871.modules.camera.processing.detection.CScoreInterface;
 import edu.wpi.cscore.CvSink;
 import edu.wpi.cscore.VideoCamera;
 import edu.wpi.first.networktables.NetworkTable;

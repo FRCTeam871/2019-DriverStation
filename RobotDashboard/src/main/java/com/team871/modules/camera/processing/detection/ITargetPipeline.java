@@ -1,4 +1,4 @@
-package com.team871.modules.camera.process;
+package com.team871.modules.camera.processing.detection;
 
 import edu.wpi.first.vision.VisionPipeline;
 import org.opencv.core.MatOfPoint;

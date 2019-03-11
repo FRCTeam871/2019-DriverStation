@@ -20,10 +20,6 @@ public class DebugScreenController {
     private CircleGraph circleGraph1;
     @FXML
     private PIDTuner pid1;
-    @FXML
-    private NumberGraph pid1Graph;
-    @FXML
-    private ArmDisplay armDisplay;
 
 
     public DebugScreenController() {
@@ -38,12 +34,7 @@ public class DebugScreenController {
         binaryIndicator1.initialize(colorMode, "isGrabbing", netConfig.isGrabbing);
         circleGraph1.initialize(colorMode, netConfig.heading);
         circleGraph1.createRadialHeadingGraph();
-
         pid1.initialize(netConfig.upperArmPID, colorMode);
-        pid1Graph.initialize(new NumericalDataValue(25.));
-        armDisplay.initialize(netConfig.upperArmAngle, netConfig.lowerArmAngle, netConfig.wristAngle);
-
-        ColorModeController colorModeController = new ColorModeController(colorMode);
 
     }
 }

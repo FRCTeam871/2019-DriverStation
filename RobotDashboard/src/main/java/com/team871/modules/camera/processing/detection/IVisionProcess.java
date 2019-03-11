@@ -1,4 +1,4 @@
-package com.team871.modules.camera.process;
+package com.team871.modules.camera.processing.detection;
 
 /**
  * @author T3Pfaffe on 3/7/2019.

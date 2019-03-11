@@ -11,8 +11,6 @@
             <CircleGraph     fx:id="circleGraph1" layoutX="6.0" layoutY="31.0" prefHeight="67.0" prefWidth="66.0"/>
             <BinaryIndicator fx:id="binaryIndicator1" layoutX="14.0" layoutY="98.0"/>
             <PIDTuner        fx:id="pid1" />
-            <NumberGraph     fx:id="pid1Graph" />
-            <ArmDisplay      fx:id="armDisplay" />
         </HBox>
     </children>
 </AnchorPane>

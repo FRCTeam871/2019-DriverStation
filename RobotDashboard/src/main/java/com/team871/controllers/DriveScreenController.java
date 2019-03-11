@@ -7,10 +7,11 @@ import com.team871.modules.ArmDisplay;
 import com.team871.modules.BinaryIndicator;
 import com.team871.modules.CircleGraph;
 import com.team871.modules.camera.VideoDisplay;
-import com.team871.modules.camera.process.FindLineVissionProcess;
-import com.team871.modules.camera.process.LineDetectPipelineWrapper;
-import com.team871.modules.camera.process.VisionProcessConfigurator;
-import com.team871.modules.camera.process.VisionProcessor;
+import com.team871.modules.camera.processing.detection.dockingTarget.DockingTargetDetectPipelineWrapper;
+import com.team871.modules.camera.processing.detection.line.FindLineVisionProcess;
+import com.team871.modules.camera.processing.detection.line.LineDetectPipelineWrapper;
+import com.team871.modules.camera.processing.detection.VisionProcessConfigurator;
+import com.team871.modules.camera.processing.detection.VisionProcessor;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.layout.HBox;
@@ -34,7 +35,10 @@ public class DriveScreenController {
     @FXML
     BinaryIndicator grabOutSense;
     @FXML
-    VisionProcessConfigurator visionProcessConfigurator;
+    VisionProcessConfigurator lineDetectConfigurator;
+    @FXML
+    VisionProcessConfigurator dockingTargetDetectConfigurator;
+
 
     private DeepSpaceNetworkVariables netConfig;
     private ColorMode colorMode;
@@ -60,7 +64,10 @@ public class DriveScreenController {
         grabInSense.initialize (colorMode, "Inner Succ", netConfig.isVacuumInner);
         grabOutSense.initialize(colorMode, "Outer Succ", netConfig.isVacuumInner, true);
 
-        VisionProcessor visionProcessor = new VisionProcessor(new FindLineVissionProcess(netConfig.getDefaultTable().getSubTable("GRIP")), new LineDetectPipelineWrapper());
-        visionProcessConfigurator.initialize(netConfig.camerasTable, visionProcessor);
+        VisionProcessor lineDetectProcessor = new VisionProcessor(new FindLineVisionProcess(netConfig.getDefaultTable().getSubTable("GRIP").getSubTable(netConfig.LINE_SENSOR_KEY)), new LineDetectPipelineWrapper());
+        lineDetectConfigurator.initialize(netConfig.camerasTable, lineDetectProcessor, "Line Detection", colorMode);
+
+        VisionProcessor targetDetectProcessor = new VisionProcessor(new FindLineVisionProcess(netConfig.getDefaultTable().getSubTable("GRIP").getSubTable(netConfig.VISUAL_TARGET_SENSOR_KEY)), new DockingTargetDetectPipelineWrapper());
+        dockingTargetDetectConfigurator.initialize(netConfig.camerasTable, targetDetectProcessor, "Docking Target Detection", colorMode);
     }
 }

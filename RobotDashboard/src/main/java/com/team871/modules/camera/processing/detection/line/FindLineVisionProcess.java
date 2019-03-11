@@ -1,5 +1,7 @@
-package com.team871.modules.camera.process;
+package com.team871.modules.camera.processing.detection.line;
 
+import com.team871.modules.camera.processing.detection.ITargetPipeline;
+import com.team871.modules.camera.processing.detection.IVisionProcess;
 import edu.wpi.first.networktables.NetworkTable;
 import org.opencv.core.MatOfPoint2f;
 import org.opencv.core.RotatedRect;
@@ -11,7 +13,7 @@ import java.text.DecimalFormat;
  * @author T3Pfaffe on 3/7/2019.
  * @project DriverStation
  */
-public class FindLineVissionProcess implements IVisionProcess{
+public class FindLineVisionProcess implements IVisionProcess {
 
     private final NetworkTable publishOrigin;
 
@@ -22,6 +24,8 @@ public class FindLineVissionProcess implements IVisionProcess{
     private final String LENGTH_X_KEY = "lengthX";
     private final String LENGTH_Y_KEY = "lengthY";
 
+    private final double WIDTH = 720;
+
     private boolean hasLine = false;
     private double angle    = 0;
     private double centerX  = 0;
@@ -29,7 +33,7 @@ public class FindLineVissionProcess implements IVisionProcess{
     private double lengthX  = 0;
     private double lengthY  = 0;
 
-    public FindLineVissionProcess(NetworkTable publishingOrigin){
+    public FindLineVisionProcess(NetworkTable publishingOrigin){
         this.publishOrigin = publishingOrigin;
     }
 
@@ -45,7 +49,7 @@ public class FindLineVissionProcess implements IVisionProcess{
 
             angle = r.angle + ((r.size.width > r.size.height) ? 90 : 0);
             DecimalFormat d = new DecimalFormat("0.0");
-            centerX = r.center.x - ((double) 720 / 2);
+            centerX = r.center.x - ((double) WIDTH / 2);
             centerY = r.center.y;
             if(r.size.width > r.size.height) {
                 lengthX = r.size.height;

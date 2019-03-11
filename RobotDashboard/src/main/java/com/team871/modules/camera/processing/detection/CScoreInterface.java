@@ -1,4 +1,4 @@
-package com.team871.modules.camera;
+package com.team871.modules.camera.processing.detection;
 
 import edu.wpi.cscore.CvSink;
 import edu.wpi.cscore.HttpCamera;

@@ -1,4 +1,4 @@
-package com.team871.modules.camera.process;
+package com.team871.modules.camera.processing.detection;
 
 import com.team871.util.data.TimmedLoopThread;
 import edu.wpi.cscore.CvSink;

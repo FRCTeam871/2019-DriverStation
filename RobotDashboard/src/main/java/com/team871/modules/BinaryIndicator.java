@@ -16,7 +16,7 @@ import javafx.scene.shape.Circle;
 public class BinaryIndicator extends VBox {
 
     private Circle circle;
-    private Label label;
+    private Label title;
     private boolean invert;
 
     public BinaryIndicator() {
@@ -25,12 +25,13 @@ public class BinaryIndicator extends VBox {
         circle.setRadius(25);
         circle.setFill(Color.BLUE);
 
-        label = new Label("Title");
-        label.setAlignment(Pos.CENTER);
-        label.setPadding(new Insets(5, 5, 5, 5));
+        title = new Label("Title");
+        title.setAlignment(Pos.CENTER);
+        title.setPadding(new Insets(5));
 
-        this.getChildren().addAll(label, circle);
+        this.getChildren().addAll(title, circle);
         this.setAlignment(Pos.CENTER);
+        this.setPadding(new Insets(5));
 
         setNeutral();
     }
@@ -53,17 +54,25 @@ public class BinaryIndicator extends VBox {
      * @param isInverted whether or not the data value will be inverted.
      */
     public void initialize(ColorMode colorMode, String title, IData<Boolean> data, boolean isInverted) {
-        label.setText(title);
-        label.setTextFill(colorMode.getSecondaryColor());
+        this.title.setText(title);
+        this.title.setTextFill(colorMode.getSecondaryColor());
         this.invert = isInverted;
 
         //Updates:
-        colorMode.addListener(observable -> label.setTextFill(colorMode.getSecondaryColor()));
+        colorMode.addListener(observable -> this.title.setTextFill(colorMode.getSecondaryColor()));
 
         setState(data.getValue());
 
         data.addListener((observable, old, newValue) -> setState(newValue));
 
+    }
+
+    /**
+     *
+     * @param newTitle changes the title to new user provided one.
+     */
+    public void setTitle(String newTitle){
+        title.setText(newTitle);
     }
 
     /**

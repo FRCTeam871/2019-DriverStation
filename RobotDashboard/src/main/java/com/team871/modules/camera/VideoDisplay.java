@@ -1,6 +1,7 @@
 package com.team871.modules.camera;
 
 import com.team871.config.Style.ColorMode;
+import com.team871.modules.camera.processing.detection.CScoreInterface;
 import com.team871.util.data.TimmedLoopThread;
 import edu.wpi.cscore.CameraServerJNI;
 import edu.wpi.cscore.CvSink;
@@ -129,7 +130,8 @@ public class VideoDisplay extends VBox {
     }
 
     private void close(){
-        cvsink.close();
         System.out.println("Closing Video Display");
+        if(cvsink!= null)
+            cvsink.close();
     }
 }
