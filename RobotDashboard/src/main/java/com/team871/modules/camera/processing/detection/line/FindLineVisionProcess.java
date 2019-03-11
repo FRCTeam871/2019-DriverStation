@@ -67,7 +67,6 @@ public class FindLineVisionProcess implements IVisionProcess {
     }
 
     private void NtPublish(){
-        System.out.println("Has Line: " + hasLine);
         publishOrigin.getEntry(HAS_LINE_KEY).setBoolean(hasLine);
         publishOrigin.getEntry(ANGLE_KEY)   .setDouble(angle);
         publishOrigin.getEntry(CENTER_X_KEY).setDouble(centerX);
