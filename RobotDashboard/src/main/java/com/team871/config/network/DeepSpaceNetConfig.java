@@ -28,7 +28,7 @@ public class DeepSpaceNetConfig extends AbstractNetConfig {
     public final String LOWER_ARM_PID_KEY = "lowerArmPID";
     public final String WRIST_PID_KEY = "wristPID";
 
-    public final String SENSOR_DATA_TABLE_KEY    = "sensorData";
+    public final String SENSOR_DATA_TABLE_KEY    = "GRIP";
     public final String VISUAL_TARGET_SENSOR_KEY = "visualTargetSensor";
     public final String LINE_SENSOR_KEY          = "lineSensor";
 

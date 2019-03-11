@@ -1,6 +1,6 @@
 package com.team871.modules.camera.processing.detection;
 
-import com.team871.util.data.TimmedLoopThread;
+import com.team871.util.data.*;
 import edu.wpi.cscore.CvSink;
 import org.opencv.core.Mat;
 
@@ -16,7 +16,7 @@ public class VisionProcessor {
     final private Thread visionProcessThread;
 
     private CvSink imageIn;
-    private boolean isWorking;
+    private BinaryDataValue isWorking;
 
     public VisionProcessor(IVisionProcess process, ITargetPipeline pipeline){
         this(null, process, pipeline);
@@ -25,7 +25,7 @@ public class VisionProcessor {
     public VisionProcessor(CvSink imageInput, IVisionProcess process, ITargetPipeline pipeline){
         this.imageIn = imageInput;
 
-        isWorking = false;
+        isWorking = new BinaryDataValue(false);
         Mat outputImage = new Mat();
 
         Runnable vissionProcces = () -> {
@@ -33,9 +33,11 @@ public class VisionProcessor {
                 imageIn.grabFrame(outputImage, 1000.0 / MIN_FPS);
                 pipeline.process(outputImage);
                 process.publish(pipeline);
-                isWorking = true;
+                if(!isWorking.getValue())
+                    isWorking.invert();
             }else {
-                isWorking = false;
+                if(isWorking.getValue())
+                    isWorking.invert();
             }
         };
         visionProcessThread = new Thread(new TimmedLoopThread(vissionProcces,FPS));
@@ -44,7 +46,7 @@ public class VisionProcessor {
         Runtime.getRuntime().addShutdownHook(new Thread(this::close));
     }
 
-    public boolean isWorking(){
+    public IData<Boolean> isWorking(){
         return isWorking;
     }
 

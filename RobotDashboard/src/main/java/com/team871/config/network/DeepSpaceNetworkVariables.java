@@ -31,6 +31,10 @@ public class DeepSpaceNetworkVariables extends DeepSpaceNetConfig{
 
     public NetworkTable camerasTable;
 
+    public NetworkTable sensorDataTable;
+    public NetworkTable visualTargetSensor;
+    public NetworkTable lineSensor;
+
     public DeepSpaceNetworkVariables(boolean isClient, NetworkTableInstance instance, String VERSION_VAL) {
         super(isClient, instance, VERSION_VAL);
 
@@ -52,6 +56,10 @@ public class DeepSpaceNetworkVariables extends DeepSpaceNetConfig{
         isVacuumInner = new NetBinaryDataValue(getDefaultTable().getEntry(IS_VACUUM_INNER_KEY));
 
         camerasTable = instance.getTable(CAMERAS_TABLE_KEY);
+
+        sensorDataTable = instance.getTable(SENSOR_DATA_TABLE_KEY);
+        visualTargetSensor = sensorDataTable.getSubTable(VISUAL_TARGET_SENSOR_KEY);
+        lineSensor = sensorDataTable.getSubTable(LINE_SENSOR_KEY);
     }
 
 }

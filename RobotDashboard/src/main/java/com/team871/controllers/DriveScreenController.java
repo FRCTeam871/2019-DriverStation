@@ -64,10 +64,10 @@ public class DriveScreenController {
         grabInSense.initialize (colorMode, "Inner Succ", netConfig.isVacuumInner);
         grabOutSense.initialize(colorMode, "Outer Succ", netConfig.isVacuumInner, true);
 
-        VisionProcessor lineDetectProcessor = new VisionProcessor(new FindLineVisionProcess(netConfig.getDefaultTable().getSubTable("GRIP").getSubTable(netConfig.LINE_SENSOR_KEY)), new LineDetectPipelineWrapper());
+        VisionProcessor lineDetectProcessor = new VisionProcessor(new FindLineVisionProcess(netConfig.lineSensor), new LineDetectPipelineWrapper());
         lineDetectConfigurator.initialize(netConfig.camerasTable, lineDetectProcessor, "Line Detection", colorMode);
 
-        VisionProcessor targetDetectProcessor = new VisionProcessor(new FindLineVisionProcess(netConfig.getDefaultTable().getSubTable("GRIP").getSubTable(netConfig.VISUAL_TARGET_SENSOR_KEY)), new DockingTargetDetectPipelineWrapper());
+        VisionProcessor targetDetectProcessor = new VisionProcessor(new FindLineVisionProcess(netConfig.visualTargetSensor), new DockingTargetDetectPipelineWrapper());
         dockingTargetDetectConfigurator.initialize(netConfig.camerasTable, targetDetectProcessor, "Docking Target Detection", colorMode);
     }
 }

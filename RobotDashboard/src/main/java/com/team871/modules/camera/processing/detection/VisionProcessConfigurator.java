@@ -25,10 +25,10 @@ public class VisionProcessConfigurator extends VBox {
     public VisionProcessConfigurator(){
         super();
         binaryIndicator = new BinaryIndicator();
-        binaryIndicator.setMaxSize(25, 25);
-        binaryIndicator.setAlignment(Pos.CENTER_LEFT);
+        binaryIndicator.setPrefSize(25, 25);
+        binaryIndicator.setAlignment(Pos.CENTER);
         this.getChildren().addAll(binaryIndicator);
-        this.setAlignment(Pos.CENTER_LEFT);
+        this.setAlignment(Pos.CENTER);
     }
 
     /**
@@ -42,10 +42,10 @@ public class VisionProcessConfigurator extends VBox {
      */
     public void initialize(NetworkTable camerasTable, VisionProcessor visionProcessor, String processName, ColorMode colorMode){
         cameraSelector = new CameraSelector(camerasTable);
-        binaryIndicator.initialize(colorMode, processName, new BinaryDataValue());
         this.getChildren().add(cameraSelector);
-
+        binaryIndicator.initialize(colorMode, processName, visionProcessor.isWorking());
         visionProcessor.start();
         cameraSelector.setOnAction(e -> visionProcessor.changeSink(cameraSelector.getSelectedSink()));
+
     }
 }
