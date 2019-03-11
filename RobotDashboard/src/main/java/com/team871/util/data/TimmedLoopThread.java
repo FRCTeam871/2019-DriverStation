@@ -41,7 +41,7 @@ public class TimmedLoopThread implements Runnable{
                 if (doDebugPrint)
                     System.out.println("Met target loop rate of " + rate + " (" + 1000/rate + "ms) by: " + sleepMillis +"ms");
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                System.out.println("Sleep interrupt on an instance of TimedLoopThread");
             }
         }
     }

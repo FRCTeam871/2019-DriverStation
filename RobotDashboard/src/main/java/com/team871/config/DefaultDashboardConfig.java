@@ -38,6 +38,7 @@ public class DefaultDashboardConfig implements IDashboardConfig {
     networkTableInstance.setNetworkIdentity(networkID);
     networkTableInstance.startClientTeam(teamNumber);
 //    networkTableInstance.startClient("localhost");
+    // TODO: find a better way to switch between testing and robots
   }
 
   @Override

@@ -28,10 +28,13 @@ public abstract class AbstractNetConfig {
   public final String MATCH_TYPE_KEY            = "MatchType";
   public final String REPLAY_NUMBER_KEY         = "ReplayNumber";
   public final String STATION_NUMBER_KEY        = "StationNumber";
-  public final String GAME_TIME_KEY             = "TODO"; //TODO: find value
 
   public final String networkIdentity;
   private Thread checkVersionThread;
+
+  public AbstractNetConfig(boolean isClient, NetworkTableInstance instance){
+    this(isClient, instance, "0.00");
+  }
 
   public AbstractNetConfig(boolean isClient, NetworkTableInstance instance, String VERSION_VAL) {
     Runtime.getRuntime().addShutdownHook(new Thread(this::close));

@@ -5,8 +5,6 @@ import com.team871.util.data.TimmedLoopThread;
 import edu.wpi.cscore.CameraServerJNI;
 import edu.wpi.cscore.CvSink;
 import edu.wpi.cscore.VideoEvent;
-import edu.wpi.cscore.VideoListener;
-import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.networktables.NetworkTable;
 import javafx.application.Platform;
 import javafx.scene.control.Label;
@@ -15,6 +13,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Paint;
+
+import java.text.DecimalFormat;
 
 public class VideoDisplay extends VBox {
 
@@ -38,8 +38,8 @@ public class VideoDisplay extends VBox {
         camHeight = 480;
 
         currentCameraFPS = new Label(" [Null] FPS ");
-        currentCameraDataRate = new Label(" [Null] bytes/s ");
-        currentCameraResolution = new Label(" [Null]x[Null] ");
+        currentCameraDataRate = new Label(" [Null] Mbit/s ");
+        currentCameraResolution = new Label(" [Null]x[Null]px ");
         currentCameraInfoBox = new HBox(currentCameraResolution, currentCameraDataRate, currentCameraFPS);
 
         display = new ImageView(defaultImage);
@@ -74,7 +74,6 @@ public class VideoDisplay extends VBox {
             if (cvsink!=null && cvsink.isValid() && cvsink.getSource().isValid()) {
 
                 display.setImage(CScoreInterface.grabImage(cvsink));
-                Platform.runLater(() -> updateCameraInfo());
                 //grabbing from CV source setting the source to JavaFX display
             }
             else {
@@ -94,26 +93,32 @@ public class VideoDisplay extends VBox {
         cameraSelector.setOnAction(event -> {
             cvsink = cameraSelector.getSelectedSink();
             currentCameraFPS.setText(" [Null] FPS ");
-            currentCameraDataRate.setText(" [Null] bytes/s ");
-            currentCameraResolution.setText(" [Null]x[Null] ");
+            currentCameraDataRate.setText(" [Null] Mbit/s ");
+            currentCameraResolution.setText(" [Null]x[Null]px ");
         });
-        colorMode.addListener(observable -> {
-            updateColor(colorMode);
-        });
+        colorMode.addListener(observable -> updateColor(colorMode));
 
         CameraServerJNI.addListener(e -> updateCameraInfo(), VideoEvent.Kind.kTelemetryUpdated.getValue(), false);
-
-        CameraServerJNI.setTelemetryPeriod(.5);
+        CameraServerJNI.setTelemetryPeriod(1.0);
     }
 
     private void updateCameraInfo(){
-        try {
-            currentCameraResolution.setText(" " + cvsink.getSource().getVideoMode().width + "x" + cvsink.getSource().getVideoMode().height);
-            currentCameraFPS.setText(" @" + (int)cvsink.getSource().getActualFPS() + "FPS ");
-            currentCameraDataRate = new Label(" " + cvsink.getSource().getActualDataRate() + "bytes/s ");
-        } catch(edu.wpi.cscore.VideoException e){
-            System.out.println("Telemetry update failed as telemetry period is not set!");
-        }
+        if(cvsink == null)
+            return;
+
+        Platform.runLater(() -> {
+            try {
+                double dataRate = cvsink.getSource().getActualDataRate()*0.000008;
+                DecimalFormat df = new DecimalFormat("#.##");
+                df.setMinimumIntegerDigits(2);
+
+                currentCameraDataRate.setText(" " + df.format(dataRate) + "Mbit/s ");
+                currentCameraResolution.setText(" " + cvsink.getSource().getVideoMode().width + "x" + cvsink.getSource().getVideoMode().height + "px ");
+                currentCameraFPS.setText(" @" + (int)cvsink.getSource().getActualFPS() + "FPS ");
+            } catch(edu.wpi.cscore.VideoException e){
+                System.out.println("Telemetry update failed as telemetry period is not set!");
+            }
+        });
     }
 
     private void updateColor(ColorMode colorMode){
