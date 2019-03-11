@@ -4,6 +4,9 @@ import com.team871.config.Style.ColorMode;
 import com.team871.util.data.TimmedLoopThread;
 import edu.wpi.cscore.CameraServerJNI;
 import edu.wpi.cscore.CvSink;
+import edu.wpi.cscore.VideoEvent;
+import edu.wpi.cscore.VideoListener;
+import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.networktables.NetworkTable;
 import javafx.application.Platform;
 import javafx.scene.control.Label;
@@ -65,9 +68,6 @@ public class VideoDisplay extends VBox {
         display.setFitHeight(camHeight);
         display.setFitWidth(camWidth);
 
-        CameraServerJNI.setTelemetryPeriod(.5);
-
-
 
         Runnable videoUpdateTask = () -> {
 
@@ -100,6 +100,10 @@ public class VideoDisplay extends VBox {
         colorMode.addListener(observable -> {
             updateColor(colorMode);
         });
+
+        CameraServerJNI.addListener(e -> updateCameraInfo(), VideoEvent.Kind.kTelemetryUpdated.getValue(), false);
+
+        CameraServerJNI.setTelemetryPeriod(.5);
     }
 
     private void updateCameraInfo(){
@@ -108,6 +112,7 @@ public class VideoDisplay extends VBox {
             currentCameraFPS.setText(" @" + (int)cvsink.getSource().getActualFPS() + "FPS ");
             currentCameraDataRate = new Label(" " + cvsink.getSource().getActualDataRate() + "bytes/s ");
         } catch(edu.wpi.cscore.VideoException e){
+            System.out.println("Telemetry update failed as telemetry period is not set!");
         }
     }
 
