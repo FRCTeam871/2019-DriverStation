@@ -1,6 +1,8 @@
 package com.team871.modules.camera.processing.detection;
 
-import com.team871.util.data.*;
+import com.team871.util.data.BinaryDataValue;
+import com.team871.util.data.IData;
+import com.team871.util.data.TimedLoopThread;
 import edu.wpi.cscore.CvSink;
 import org.opencv.core.Mat;
 
@@ -40,7 +42,7 @@ public class VisionProcessor {
                     isWorking.invert();
             }
         };
-        visionProcessThread = new Thread(new TimmedLoopThread(vissionProcces,FPS));
+        visionProcessThread = new Thread(new TimedLoopThread(vissionProcces,FPS));
         visionProcessThread.setDaemon(true);
 
         Runtime.getRuntime().addShutdownHook(new Thread(this::close));
@@ -63,4 +65,9 @@ public class VisionProcessor {
             visionProcessThread.interrupt();
     }
 
+    public void stop() {
+        if(visionProcessThread.isAlive()){
+            visionProcessThread.interrupt();
+        }
+    }
 }

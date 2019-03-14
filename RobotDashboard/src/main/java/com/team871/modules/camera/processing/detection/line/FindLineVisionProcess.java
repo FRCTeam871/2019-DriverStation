@@ -17,7 +17,7 @@ public class FindLineVisionProcess implements IVisionProcess {
 
     private final NetworkTable publishOrigin;
 
-    private final String HAS_LINE_KEY = "hasLine";
+    private final String HAS_LINE_KEY = "hasTarget";
     private final String ANGLE_KEY    = "angle";
     private final String CENTER_X_KEY = "centerX";
     private final String CENTER_Y_KEY = "centerY";

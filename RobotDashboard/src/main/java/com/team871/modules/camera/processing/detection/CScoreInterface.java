@@ -31,6 +31,9 @@ public class CScoreInterface implements ObservableValue<List<VideoCamera>> {
     private static List<CvSink> activeSinks;
     private static List<VideoCamera> foundCameras;
 
+    private static final double DEFAULT_TIMEOUT = 100000;
+    //100 seconds
+
     private NetworkTable camerasTable;
     private List<InvalidationListener> invalidationListeners;
 
@@ -79,17 +82,25 @@ public class CScoreInterface implements ObservableValue<List<VideoCamera>> {
 
 
     public static Image grabImage(CvSink input){
+        return grabImage(input, DEFAULT_TIMEOUT);
+    }
 
+    public static Image grabImage(CvSink input, double timeout){
         MatOfByte byteMat = new MatOfByte();
-        Mat captureImg =  grabMat(input);
+        Mat captureImg =  grabMat(input, timeout);//~31ms
+        Imgcodecs.imencode(".bmp", captureImg, byteMat); //~2ms
 
-        Imgcodecs.imencode(".bmp", captureImg, byteMat);
-        return new Image(new ByteArrayInputStream(byteMat.toArray()));
+        return new Image(new ByteArrayInputStream(byteMat.toArray())); //~1ms
     }
 
     public static Mat grabMat(CvSink input){
+        return grabMat(input, DEFAULT_TIMEOUT);
+    }
+
+    public static Mat grabMat(CvSink input, double timeout){
+
         Mat captureImg = new Mat();
-        input.grabFrame(captureImg);
+        input.grabFrame(captureImg, timeout);
         return captureImg;
     }
 

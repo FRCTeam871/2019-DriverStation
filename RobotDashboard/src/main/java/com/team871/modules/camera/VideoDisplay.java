@@ -2,11 +2,11 @@ package com.team871.modules.camera;
 
 import com.team871.config.Style.ColorMode;
 import com.team871.modules.camera.processing.detection.CScoreInterface;
-import com.team871.util.data.TimmedLoopThread;
 import edu.wpi.cscore.CameraServerJNI;
 import edu.wpi.cscore.CvSink;
 import edu.wpi.cscore.VideoEvent;
 import edu.wpi.first.networktables.NetworkTable;
+import javafx.animation.AnimationTimer;
 import javafx.application.Platform;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -30,12 +30,14 @@ public class VideoDisplay extends VBox {
     private double camWidth;
     private CvSink cvsink;
 
-    private double FPS;
+    private AnimationTimer displayUpdateThread2;
+
+    private Image defaultImage;
 
 
-	public VideoDisplay(){
-        Image defaultImage = new Image("noCam.png");
-	    camWidth  = 720;
+    public VideoDisplay(){
+        defaultImage = new Image("noCam.png");
+        camWidth  = 720;
         camHeight = 480;
 
         currentCameraFPS = new Label(" [Null] FPS ");
@@ -50,8 +52,6 @@ public class VideoDisplay extends VBox {
 
 
         display.setImage(defaultImage);
-        FPS = 60;
-
         Runtime.getRuntime().addShutdownHook(new Thread(this::close));
     }
 
@@ -71,10 +71,9 @@ public class VideoDisplay extends VBox {
 
 
         Runnable videoUpdateTask = () -> {
-
             if (cvsink!=null && cvsink.isValid() && cvsink.getSource().isValid()) {
 
-                display.setImage(CScoreInterface.grabImage(cvsink));
+                display.setImage(CScoreInterface.grabImage(cvsink,(16)));
                 //grabbing from CV source setting the source to JavaFX display
             }
             else {
@@ -86,17 +85,28 @@ public class VideoDisplay extends VBox {
             }
         };
 
-        Thread displayUpdateThread = new Thread(new TimmedLoopThread(videoUpdateTask, (long) FPS));
-        displayUpdateThread.setDaemon(true);
-        displayUpdateThread.start();
+        displayUpdateThread2 = new AnimationTimer() {
+            @Override
+            public void handle(long now) {
+                if (cvsink!=null && cvsink.isValid() && cvsink.getSource().isValid()) {
+
+                    display.setImage(CScoreInterface.grabImage(cvsink));
+                    //grabbing from CV source setting the source to JavaFX display
+                }
+                else {
+
+                }
+            }
+        };
+
+        displayUpdateThread2.start();
 
         //Updates:
         cameraSelector.setOnAction(event -> {
+            setDefaultCameraInfo();
             cvsink = cameraSelector.getSelectedSink();
-            currentCameraFPS.setText(" [Null] FPS ");
-            currentCameraDataRate.setText(" [Null] Mbit/s ");
-            currentCameraResolution.setText(" [Null]x[Null]px ");
         });
+
         colorMode.addListener(observable -> updateColor(colorMode));
 
         CameraServerJNI.addListener(e -> updateCameraInfo(), VideoEvent.Kind.kTelemetryUpdated.getValue(), false);
@@ -104,8 +114,10 @@ public class VideoDisplay extends VBox {
     }
 
     private void updateCameraInfo(){
-        if(cvsink == null)
+        if(cvsink == null) {
+            setDefaultCameraInfo();
             return;
+        }
 
         Platform.runLater(() -> {
             try {
@@ -122,6 +134,14 @@ public class VideoDisplay extends VBox {
         });
     }
 
+    private void setDefaultCameraInfo(){
+        Platform.runLater(() -> {
+            currentCameraFPS.setText(" [Null] FPS ");
+            currentCameraDataRate.setText(" [Null] Mbit/s ");
+            currentCameraResolution.setText(" [Null]x[Null]px ");
+        });
+    }
+
     private void updateColor(ColorMode colorMode){
         Paint newTextFill = colorMode.getSecondaryColor();
         currentCameraDataRate.setTextFill(newTextFill);
@@ -131,6 +151,7 @@ public class VideoDisplay extends VBox {
 
     private void close(){
         System.out.println("Closing Video Display");
+        displayUpdateThread2.stop();
         if(cvsink!= null)
             cvsink.close();
     }

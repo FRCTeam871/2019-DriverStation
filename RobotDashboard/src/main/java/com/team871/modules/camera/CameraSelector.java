@@ -32,7 +32,6 @@ public class CameraSelector extends ComboBox<VideoCamera> {
     private void updateSelection(){
         this.getItems().retainAll(cScoreInterface.getFoundCameras());
         //removes old cameras
-//        System.out.println(this.getItems().toString());
 
         for(VideoCamera camera: cScoreInterface.getFoundCameras()){
             if(!this.getItems().contains(camera)){
