@@ -22,6 +22,7 @@ public class FindDockingTargetVisionProcess implements IVisionProcess {
     private final String CENTER_Y_KEY = "centerY";
     private final String LENGTH_X_KEY = "lengthX";
     private final String LENGTH_Y_KEY = "lengthY";
+    private final String DISTANCE_KEY = "distance";
 
     private final double WIDTH = 720;
 
@@ -31,6 +32,7 @@ public class FindDockingTargetVisionProcess implements IVisionProcess {
     private double centerY  = 0;
     private double lengthX  = 0;
     private double lengthY  = 0;
+    private double distance = 0;
 
     public FindDockingTargetVisionProcess(NetworkTable publishingOrigin){
         this.publishOrigin = publishingOrigin;
@@ -86,17 +88,18 @@ public class FindDockingTargetVisionProcess implements IVisionProcess {
         this.centerY = (rect1.center.y + rect2.center.y)/2;
         this.lengthX = width;
         this.lengthY = height;
+        this.distance = 0.0; //TODO: calculate estimated target distance
 
     }
 
     private void NtPublish(){
-        System.out.println("Has Line: " + hasTarget);
         publishOrigin.getEntry(HAS_TARGET_KEY).setBoolean(hasTarget);
         publishOrigin.getEntry(ANGLE_KEY)   .setDouble(angle);
         publishOrigin.getEntry(CENTER_X_KEY).setDouble(centerX);
         publishOrigin.getEntry(CENTER_Y_KEY).setDouble(centerY);
         publishOrigin.getEntry(LENGTH_X_KEY).setDouble(lengthX);
         publishOrigin.getEntry(LENGTH_Y_KEY).setDouble(lengthY);
+        publishOrigin.getEntry(DISTANCE_KEY).setDouble(distance);
     }
 
 }

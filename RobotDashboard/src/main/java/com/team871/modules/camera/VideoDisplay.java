@@ -1,7 +1,7 @@
 package com.team871.modules.camera;
 
 import com.team871.config.Style.ColorMode;
-import com.team871.modules.camera.processing.detection.CScoreInterface;
+import com.team871.modules.camera.processing.cscore.CScoreInterface;
 import edu.wpi.cscore.CameraServerJNI;
 import edu.wpi.cscore.CvSink;
 import edu.wpi.cscore.VideoEvent;
@@ -30,13 +30,11 @@ public class VideoDisplay extends VBox {
     private double camWidth;
     private CvSink cvsink;
 
-    private AnimationTimer displayUpdateThread2;
-
-    private Image defaultImage;
+    private AnimationTimer displayUpdateThread;
 
 
     public VideoDisplay(){
-        defaultImage = new Image("noCam.png");
+        Image defaultImage = new Image("noCam.png");
         camWidth  = 720;
         camHeight = 480;
 
@@ -70,22 +68,7 @@ public class VideoDisplay extends VBox {
         display.setFitWidth(camWidth);
 
 
-        Runnable videoUpdateTask = () -> {
-            if (cvsink!=null && cvsink.isValid() && cvsink.getSource().isValid()) {
-
-                display.setImage(CScoreInterface.grabImage(cvsink,(16)));
-                //grabbing from CV source setting the source to JavaFX display
-            }
-            else {
-                try {
-                    Thread.sleep(2000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        };
-
-        displayUpdateThread2 = new AnimationTimer() {
+        displayUpdateThread = new AnimationTimer() {
             @Override
             public void handle(long now) {
                 if (cvsink!=null && cvsink.isValid() && cvsink.getSource().isValid()) {
@@ -99,7 +82,7 @@ public class VideoDisplay extends VBox {
             }
         };
 
-        displayUpdateThread2.start();
+        displayUpdateThread.start();
 
         //Updates:
         cameraSelector.setOnAction(event -> {
@@ -151,7 +134,7 @@ public class VideoDisplay extends VBox {
 
     private void close(){
         System.out.println("Closing Video Display");
-        displayUpdateThread2.stop();
+        displayUpdateThread.stop();
         if(cvsink!= null)
             cvsink.close();
     }

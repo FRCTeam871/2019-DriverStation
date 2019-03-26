@@ -23,6 +23,7 @@ public class FindLineVisionProcess implements IVisionProcess {
     private final String CENTER_Y_KEY = "centerY";
     private final String LENGTH_X_KEY = "lengthX";
     private final String LENGTH_Y_KEY = "lengthY";
+    private final String DISTANCE_KEY = "distance";
 
     private final double WIDTH = 720;
 
@@ -67,11 +68,15 @@ public class FindLineVisionProcess implements IVisionProcess {
     }
 
     private void NtPublish(){
+
         publishOrigin.getEntry(HAS_LINE_KEY).setBoolean(hasLine);
         publishOrigin.getEntry(ANGLE_KEY)   .setDouble(angle);
         publishOrigin.getEntry(CENTER_X_KEY).setDouble(centerX);
         publishOrigin.getEntry(CENTER_Y_KEY).setDouble(centerY);
         publishOrigin.getEntry(LENGTH_X_KEY).setDouble(lengthX);
         publishOrigin.getEntry(LENGTH_Y_KEY).setDouble(lengthY);
+        publishOrigin.getEntry(DISTANCE_KEY).setDouble(0.0);
+
     }
+
 }

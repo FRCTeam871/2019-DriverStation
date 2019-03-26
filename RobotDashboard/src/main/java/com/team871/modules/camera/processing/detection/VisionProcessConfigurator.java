@@ -1,11 +1,13 @@
 package com.team871.modules.camera.processing.detection;
 
 import com.team871.config.Style.ColorMode;
+import com.team871.config.network.DeepSpaceNetConfig;
 import com.team871.modules.BinaryIndicator;
 import com.team871.modules.camera.CameraSelector;
-import com.team871.util.data.BinaryDataValue;
+import com.team871.util.data.NetBinaryDataValue;
 import edu.wpi.cscore.CvSink;
 import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableEntry;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
@@ -24,20 +26,45 @@ public class VisionProcessConfigurator extends VBox {
     private Label title;
     private CameraSelector cameraSelector;
     private BinaryIndicator runningIndicator;
+
+    private HBox indicatorsPanel;
     private BinaryIndicator targetFoundIndicator;
 
 
     public VisionProcessConfigurator(){
         super();
-        runningIndicator = new BinaryIndicator();
         title = new Label("Not initialized");
-        targetFoundIndicator = new BinaryIndicator();
-        targetFoundIndicator.setMaxSize(15, 15);
-        targetFoundIndicator.setAlignment(Pos.CENTER);
-        runningIndicator.setMaxSize(15, 15);
+
+        runningIndicator = new BinaryIndicator();
         runningIndicator.setAlignment(Pos.CENTER);
-        this.getChildren().addAll(title, new HBox(runningIndicator, targetFoundIndicator));
+
+        targetFoundIndicator = new BinaryIndicator();
+        targetFoundIndicator.setAlignment(Pos.CENTER);
+
+        indicatorsPanel = new HBox(runningIndicator);
+
+        this.getChildren().addAll(title, indicatorsPanel);
         this.setAlignment(Pos.CENTER);
+    }
+
+    /**
+     *
+     * @param camerasTable will tell the configurator
+     *                     where to look for sources.
+     * @param visionProcessor will tell the configurator
+     *                        what to do with the source.
+     * @param processName what the process is called for
+     *                    identification.
+     * @param colorMode what to set the /
+     * @param dataOutputTable
+     */
+    public void initialize(NetworkTable camerasTable, VisionProcessor visionProcessor, String processName, ColorMode colorMode, NetworkTable dataOutputTable) {
+        initialize(camerasTable, visionProcessor, processName, colorMode);
+
+        NetworkTableEntry hasTargetEntry = dataOutputTable.getEntry(DeepSpaceNetConfig.HAS_TARGET_KEY);
+        targetFoundIndicator.initialize(colorMode, "Found Target", new NetBinaryDataValue(hasTargetEntry));
+
+        indicatorsPanel.getChildren().add(targetFoundIndicator);
     }
 
     /**
@@ -55,8 +82,7 @@ public class VisionProcessConfigurator extends VBox {
 
         title.setText(processName);
         title.setTextFill(colorMode.getSecondaryColor());
-        runningIndicator.initialize(colorMode, "Is On", visionProcessor.isWorking());
-        targetFoundIndicator.initialize(colorMode, "Found Target", new BinaryDataValue());
+        runningIndicator.initialize(colorMode, "Running", visionProcessor.isWorking());
 
         updateColor(colorMode);
         cameraSelector.setOnAction(e -> {
@@ -64,7 +90,7 @@ public class VisionProcessConfigurator extends VBox {
                 visionProcessor.stop();
 
             CvSink newSink = cameraSelector.getSelectedSink();
-            if(newSink.isValid()){
+            if(newSink != null && newSink.isValid()){
                 visionProcessor.changeSink(newSink);
                 visionProcessor.start();
             }

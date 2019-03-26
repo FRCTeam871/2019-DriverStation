@@ -3,6 +3,7 @@ package com.team871;
 import com.team871.config.DefaultDashboardConfig;
 import com.team871.config.IDashboardConfig;
 import com.team871.controllers.DisplayScreenController;
+import com.team871.modules.camera.processing.cscore.WindowsUsbCameraWrapper;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
@@ -29,6 +30,7 @@ public class FXMLGraphicalMain extends Application {
         Parent root = null;
 
         IDashboardConfig config = new DefaultDashboardConfig(TEAM_NUMBER);
+        WindowsUsbCameraWrapper usbCameraWrapper = new WindowsUsbCameraWrapper(0);
 
         try {
             URL location = getClass().getClassLoader().getResource(FXML_FILENAME);
@@ -46,6 +48,7 @@ public class FXMLGraphicalMain extends Application {
         primaryStage.setTitle("Robot Dashboard");
         primaryStage.setScene(new Scene(root, config.getInitialWidth(), config.getInitialHeight()));
         primaryStage.show();
+
     }
 
 

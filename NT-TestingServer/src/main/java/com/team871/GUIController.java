@@ -15,7 +15,7 @@ public class GUIController {
 
     private NetworkTableInstance networkTableInstance;
     private DeepSpaceNetConfig netConfig;
-    private WindowsUsbCameraWrapper usbCameraWrapper;
+//    private WindowsUsbCameraWrapper usbCameraWrapper;
     private boolean isServerOn;
 
     public GUIController(){
@@ -37,7 +37,7 @@ public class GUIController {
     void toggleServerAction() {
 
         if(isServerOn) {
-            usbCameraWrapper.close();
+//            usbCameraWrapper.close();
             networkTableInstance.stopServer();
 
             System.out.println("Closed. (sorta)");
@@ -47,14 +47,14 @@ public class GUIController {
 
         }else {
             networkTableInstance.startServer();
-            usbCameraWrapper = new WindowsUsbCameraWrapper(0);
+//            usbCameraWrapper = new WindowsUsbCameraWrapper(0);
             netConfig = new DeepSpaceNetConfig(false, networkTableInstance, "0.00");
 
             toggleServerButton.setText("Stop Server");
             isServerOn = true;
 
-            System.out.println("Camera is valid: " + usbCameraWrapper.isValid());
-            System.out.println(netConfig.getInstance().getTable(netConfig.CAMERAS_TABLE_KEY).getSubTables().toString());
+//            System.out.println("Camera is valid: " + usbCameraWrapper.isValid());
+//            System.out.println(netConfig.getInstance().getTable(netConfig.CAMERAS_TABLE_KEY).getSubTables().toString());
         }
     }
 }

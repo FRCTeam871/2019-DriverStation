@@ -1,15 +1,15 @@
-package com.team871.modules.camera.processing.detection;
+package com.team871.newStuff;
 
-import com.team871.util.data.TimedLoopThread;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.videoio.VideoCapture;
 
 /**
- * @author T3Pfaffe on 3/1/2019.
+ * @author T3Pfaffe on 3/19/2019.
  * @project DriverStation
  */
 public class WindowsUsbCameraWrapper {
+
 
     static {
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
@@ -45,9 +45,9 @@ public class WindowsUsbCameraWrapper {
             long startT;
             Mat captureImg = new Mat();
 
-                startT = System.currentTimeMillis();
-                videoCapture.read(captureImg);
-                cvSinkStream.putFrame(captureImg);
+            startT = System.currentTimeMillis();
+            videoCapture.read(captureImg);
+            cvSinkStream.putFrame(captureImg);
         };
 
         videoUpdateThread = new Thread(new TimedLoopThread(videoUpdateTask, FPS));
@@ -64,6 +64,7 @@ public class WindowsUsbCameraWrapper {
     public void close(){
         videoUpdateThread.interrupt();
         videoCapture.release();
+        cvSinkStream.close();
         System.out.println(" \tWindowsUsbCameraWrapper-" + instanceIndex + " shut-down");
     }
 

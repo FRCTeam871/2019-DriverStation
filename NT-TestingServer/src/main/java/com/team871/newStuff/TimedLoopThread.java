@@ -1,4 +1,4 @@
-package com.team871.util.data;
+package com.team871.newStuff;
 
 /**
  * @author T3Pfaffe on 3/7/2019.
@@ -41,7 +41,7 @@ public class TimedLoopThread implements Runnable{
                 if (doDebugPrint)
                     System.out.println("Met target loop rate of " + rate + "hz (" + 1000/rate + "ms) by: " + sleepMillis +"ms");
             } catch (InterruptedException e) {
-                System.out.println("Sleep interrupt on an instance of TimedLoopThread");
+                System.out.println("Sleep interrupt on an instance of TimedLoopThread from: (" + this.runnable.toString() + ") ");
             }
         }
     }

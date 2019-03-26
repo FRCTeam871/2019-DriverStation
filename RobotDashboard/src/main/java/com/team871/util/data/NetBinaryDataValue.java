@@ -16,7 +16,8 @@ public class NetBinaryDataValue extends BinaryDataValue implements IData<Boolean
     super();
     this.entry = entry;
 
-      //Updates:
+
+    //Updates:
     entry.addListener(event -> {
       try {
         super.set(event.value.getBoolean());
@@ -24,6 +25,8 @@ public class NetBinaryDataValue extends BinaryDataValue implements IData<Boolean
         System.out.println("Table Entry(" + entry.getInfo() + "): " + e.toString());
       }
     }, EntryListenerFlags.kNew | EntryListenerFlags.kUpdate);
+
+    super.set(false);
   }
 
 

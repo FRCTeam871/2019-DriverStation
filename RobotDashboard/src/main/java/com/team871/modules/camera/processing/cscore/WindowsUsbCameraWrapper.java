@@ -1,8 +1,6 @@
-package com.team871;
+package com.team871.modules.camera.processing.cscore;
 
-import edu.wpi.cscore.CvSource;
-import edu.wpi.cscore.VideoMode;
-import edu.wpi.first.cameraserver.CameraServer;
+import com.team871.util.TimedLoopThread;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.videoio.VideoCapture;
@@ -19,12 +17,12 @@ public class WindowsUsbCameraWrapper {
     private Integer instanceQuantity;
     private int instanceIndex;
 
-    private final double FPS;
-    private CameraServer cameraServer;
+    private final int FPS;
+    private final int Width;
+    private final int Height;
 
     private VideoCapture videoCapture;
-    private CvSource cvSource;
-
+    private CvSinkStreamWrapper cvSinkStream;
     private Thread videoUpdateThread;
 
     public WindowsUsbCameraWrapper(int usbIndex) {
@@ -35,31 +33,24 @@ public class WindowsUsbCameraWrapper {
         instanceIndex = instanceQuantity;
 
         //Statics
-        FPS = 60;
+        FPS = 30;
+        Width = 1280;
+        Height = 720;
 
         //CV objects
-        cameraServer = CameraServer.getInstance();
         videoCapture = new VideoCapture(usbIndex);
-        cvSource = new CvSource(("WinUSBCam" + instanceQuantity), new VideoMode(VideoMode.PixelFormat.kMJPEG, 1280, 720, (int) FPS));
-        cameraServer.startAutomaticCapture(cvSource);
+        cvSinkStream = new CvSinkStreamWrapper(("WindowsUSB-"+ instanceQuantity), Width, Height, FPS);
 
         Runnable videoUpdateTask = () -> {
             long startT;
             Mat captureImg = new Mat();
-            while (true) {
+
                 startT = System.currentTimeMillis();
                 videoCapture.read(captureImg);
-                cvSource.putFrame(captureImg);
-                try {
-                    final long sleepMillis = (long) ((1000.0 / FPS) - (System.currentTimeMillis() - startT));
-                    Thread.sleep(Math.max(sleepMillis, 0));
-                } catch (InterruptedException e) {
-
-                }
-            }
+                cvSinkStream.putFrame(captureImg);
         };
 
-        videoUpdateThread = new Thread(videoUpdateTask);
+        videoUpdateThread = new Thread(new TimedLoopThread(videoUpdateTask, FPS));
         videoUpdateThread.setDaemon(true);
         videoUpdateThread.start();
 
@@ -67,13 +58,11 @@ public class WindowsUsbCameraWrapper {
     }
 
     public boolean isValid(){
-        return cvSource.isValid();
+        return cvSinkStream.isValid();
     }
 
     public void close(){
         videoUpdateThread.interrupt();
-        cameraServer.getServer().close();
-        cvSource.close();
         videoCapture.release();
         System.out.println(" \tWindowsUsbCameraWrapper-" + instanceIndex + " shut-down");
     }

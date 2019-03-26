@@ -7,11 +7,11 @@ import com.team871.modules.ArmDisplay;
 import com.team871.modules.BinaryIndicator;
 import com.team871.modules.CircleGraph;
 import com.team871.modules.camera.VideoDisplay;
+import com.team871.modules.camera.processing.detection.VisionProcessConfigurator;
+import com.team871.modules.camera.processing.detection.VisionProcessor;
 import com.team871.modules.camera.processing.detection.dockingTarget.DockingTargetDetectPipelineWrapper;
 import com.team871.modules.camera.processing.detection.line.FindLineVisionProcess;
 import com.team871.modules.camera.processing.detection.line.LineDetectPipelineWrapper;
-import com.team871.modules.camera.processing.detection.VisionProcessConfigurator;
-import com.team871.modules.camera.processing.detection.VisionProcessor;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.layout.HBox;
@@ -65,9 +65,9 @@ public class DriveScreenController {
         grabOutSense.initialize(colorMode, "Outer Succ", netConfig.isVacuumInner, true);
 
         VisionProcessor lineDetectProcessor = new VisionProcessor(new FindLineVisionProcess(netConfig.lineSensor), new LineDetectPipelineWrapper());
-        lineDetectConfigurator.initialize(netConfig.camerasTable, lineDetectProcessor, "Line Detection", colorMode);
+        lineDetectConfigurator.initialize(netConfig.camerasTable, lineDetectProcessor, "Line Detection", colorMode, netConfig.lineSensor);
 
         VisionProcessor targetDetectProcessor = new VisionProcessor(new FindLineVisionProcess(netConfig.visualTargetSensor), new DockingTargetDetectPipelineWrapper());
-        dockingTargetDetectConfigurator.initialize(netConfig.camerasTable, targetDetectProcessor, "Docking Target Detection", colorMode);
+        dockingTargetDetectConfigurator.initialize(netConfig.camerasTable, targetDetectProcessor, "Docking Target Detection", colorMode, netConfig.visualTargetSensor);
     }
 }

@@ -1,7 +1,8 @@
-package com.team871.modules.camera.processing.detection;
+package com.team871.newStuff;
 
 import edu.wpi.cscore.CvSource;
 import edu.wpi.cscore.VideoMode;
+import edu.wpi.cscore.VideoSink;
 import edu.wpi.first.cameraserver.CameraServer;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
@@ -17,17 +18,21 @@ public class CvSinkStreamWrapper {
     }
 
     private CvSource cvSource;
+    private CameraServer cameraServer;
+    private String streamName;
+
 
 
     public CvSinkStreamWrapper(String streamName, int width, int height, int FPS) {
+        this.streamName = streamName;
 
         //CV objects
-        CameraServer cameraServer = CameraServer.getInstance();
+        cameraServer = CameraServer.getInstance();
         cvSource = new CvSource(streamName, new VideoMode(VideoMode.PixelFormat.kMJPEG, width, height, FPS));
         Mat captureImg = new Mat();
 
         cameraServer.startAutomaticCapture(cvSource);
-        putFrame(captureImg);
+//        putFrame(captureImg);
 
 //        Runtime.getRuntime().addShutdownHook(new Thread(this::close));
     }
@@ -44,5 +49,12 @@ public class CvSinkStreamWrapper {
         return cvSource.isValid();
     }
 
+    public void close(){
+        VideoSink activeSink =cameraServer.getServer(streamName);
+//        if(activeSink!=null)
+//            activeSink.close();
+
+        cvSource.close();
+    }
 
 }
