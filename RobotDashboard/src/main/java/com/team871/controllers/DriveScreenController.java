@@ -6,6 +6,7 @@ import com.team871.config.network.DeepSpaceNetworkVariables;
 import com.team871.modules.ArmDisplay;
 import com.team871.modules.BinaryIndicator;
 import com.team871.modules.CircleGraph;
+import com.team871.modules.GameInformationDisplay;
 import com.team871.modules.camera.VideoDisplay;
 import com.team871.modules.camera.processing.detection.VisionProcessConfigurator;
 import com.team871.modules.camera.processing.detection.VisionProcessor;
@@ -38,7 +39,8 @@ public class DriveScreenController {
     VisionProcessConfigurator lineDetectConfigurator;
     @FXML
     VisionProcessConfigurator dockingTargetDetectConfigurator;
-
+    @FXML
+    public GameInformationDisplay gameInformationDisplay;
 
     private DeepSpaceNetworkVariables netConfig;
     private ColorMode colorMode;
@@ -51,7 +53,7 @@ public class DriveScreenController {
         this.netConfig = netConfig;
         colorMode = config.getColorMode();
 
-        videoDisplay.initialize(netConfig.camerasTable,480, 720, colorMode);
+        gameInformationDisplay.initialize(netConfig, colorMode);
 
         armDisplay.initialize(netConfig.upperArmAngle, netConfig.lowerArmAngle, netConfig.wristAngle);
 
@@ -63,6 +65,8 @@ public class DriveScreenController {
         grabSenseBox.setAlignment(Pos.CENTER);
         grabInSense.initialize (colorMode, "Inner Succ", netConfig.isVacuumInner);
         grabOutSense.initialize(colorMode, "Outer Succ", netConfig.isVacuumInner, true);
+
+        videoDisplay.initialize(netConfig.camerasTable,480, 720, colorMode);
 
         VisionProcessor lineDetectProcessor = new VisionProcessor(new FindLineVisionProcess(netConfig.lineSensor), new LineDetectPipelineWrapper());
         lineDetectConfigurator.initialize(netConfig.camerasTable, lineDetectProcessor, "Line Detection", colorMode, netConfig.lineSensor);

@@ -5,10 +5,10 @@ import com.team871.util.data.IData;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.HBox;
 
 
-public class StringDisplay extends VBox {
+public class StringDisplay extends HBox {
 
     private ColorMode colorMode;
     private IData<String> data;
@@ -16,10 +16,16 @@ public class StringDisplay extends VBox {
     private Label nameDisplay;
 
     public StringDisplay(ColorMode colorMode, IData<String> data, String name) {
+        this(colorMode, data, name, ':');
+    }
+
+    public StringDisplay(ColorMode colorMode, IData<String> data, String name, char dataPrefix) {
         this.colorMode = colorMode;
         this.data = data;
 
-        nameDisplay = new Label(name + ": ");
+
+
+        nameDisplay = new Label(name + dataPrefix + " ");
         textArea = new Label(data.getValue());
 
         textArea.setTextFill(colorMode.getSecondaryColor());

@@ -5,11 +5,11 @@ import com.team871.util.data.IData;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.HBox;
 
 import java.text.DecimalFormat;
 
-public class NumberDisplay extends VBox {
+public class NumberDisplay extends HBox {
 
     private ColorMode colorMode;
     private IData<Double> data;
@@ -18,9 +18,9 @@ public class NumberDisplay extends VBox {
     private DecimalFormat df;
 
 
-    public NumberDisplay(ColorMode colorMode, IData<Double> data, String name) {
+    public NumberDisplay(ColorMode colorMode, IData<Double> data, String name, char dataPrefix) {
         this();
-        initialize(colorMode, data, name);
+        initialize(colorMode, data, name, dataPrefix);
     }
 
     public NumberDisplay() {
@@ -32,11 +32,11 @@ public class NumberDisplay extends VBox {
         this.setPadding(new Insets(3, 3, 3, 3));
     }
 
-    public void initialize(ColorMode colorMode, IData<Double> data, String name) {
+    public void initialize(ColorMode colorMode, IData<Double> data, String name, char dataPrefix) {
         this.colorMode = colorMode;
         this.data = data;
 
-        nameDisplay.setText(name + ": ");
+        nameDisplay.setText(name + dataPrefix + " ");
         textArea.setText(Double.toString(round(data.getValue(), 2)));
 
         textArea.setTextFill(colorMode.getSecondaryColor());

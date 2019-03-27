@@ -11,10 +11,15 @@ import edu.wpi.first.networktables.NetworkTableInstance;
  */
 public class ConnectionIndicator extends BinaryIndicator {
 
+    public ConnectionIndicator(NetworkTableInstance tableInstance, ColorMode colorMode){
+        this();
+        initialize(tableInstance, colorMode);
+
+    }
+
     public ConnectionIndicator(){
         super();
     }
-
 
     public void initialize(NetworkTableInstance tableInstance, ColorMode colorMode) {
         MutableDataValue<Boolean> connectedValue = new MutableDataValue<>(new BinaryDataValue());
