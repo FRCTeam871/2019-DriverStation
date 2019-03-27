@@ -2,7 +2,7 @@ package com.team871.controllers;
 
 import com.team871.config.IDashboardConfig;
 import com.team871.config.Style.ColorMode;
-import com.team871.config.network.DeepSpaceNetworkVariables;
+import com.team871.config.network.DeepSpaceNetConfig;
 import com.team871.modules.ArmDisplay;
 import com.team871.modules.BinaryIndicator;
 import com.team871.modules.CircleGraph;
@@ -13,6 +13,7 @@ import com.team871.modules.camera.processing.detection.VisionProcessor;
 import com.team871.modules.camera.processing.detection.dockingTarget.DockingTargetDetectPipelineWrapper;
 import com.team871.modules.camera.processing.detection.line.FindLineVisionProcess;
 import com.team871.modules.camera.processing.detection.line.LineDetectPipelineWrapper;
+import com.team871.util.data.BinaryDataValue;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.layout.HBox;
@@ -42,36 +43,36 @@ public class DriveScreenController {
     @FXML
     public GameInformationDisplay gameInformationDisplay;
 
-    private DeepSpaceNetworkVariables netConfig;
+    private DeepSpaceNetConfig netConfig;
     private ColorMode colorMode;
 
     public DriveScreenController(){
     }
 
     @FXML
-    void initialize(IDashboardConfig config, DeepSpaceNetworkVariables netConfig){
+    void initialize(IDashboardConfig config, DeepSpaceNetConfig netConfig){
         this.netConfig = netConfig;
         colorMode = config.getColorMode();
 
         gameInformationDisplay.initialize(netConfig, colorMode);
 
-        armDisplay.initialize(netConfig.upperArmAngle, netConfig.lowerArmAngle, netConfig.wristAngle);
+        armDisplay.initialize(netConfig.armTable);
 
-        headingDisplay.initialize(colorMode, netConfig.heading);
+        headingDisplay.initialize(colorMode, netConfig.robotLocalizationTable.getHeading());
         headingDisplay.createRadialHeadingGraph();
         headingDisplay.setPrefHeight(150);
         headingDisplay.setPrefWidth(150);
 
         grabSenseBox.setAlignment(Pos.CENTER);
-        grabInSense.initialize (colorMode, "Inner Succ", netConfig.isVacuumInner);
-        grabOutSense.initialize(colorMode, "Outer Succ", netConfig.isVacuumInner, true);
+        grabInSense.initialize (colorMode, "Inner Succ", new BinaryDataValue());
+        grabOutSense.initialize(colorMode, "Outer Succ", new BinaryDataValue(), true);
 
         videoDisplay.initialize(netConfig.camerasTable,480, 720, colorMode);
 
-        VisionProcessor lineDetectProcessor = new VisionProcessor(new FindLineVisionProcess(netConfig.lineSensor), new LineDetectPipelineWrapper());
-        lineDetectConfigurator.initialize(netConfig.camerasTable, lineDetectProcessor, "Line Detection", colorMode, netConfig.lineSensor);
+        VisionProcessor lineDetectProcessor = new VisionProcessor(new FindLineVisionProcess(netConfig.gripTable.getLineSensorTableTable()), new LineDetectPipelineWrapper());
+        lineDetectConfigurator.initialize(netConfig.camerasTable, lineDetectProcessor, "Line Detection", colorMode, netConfig.gripTable.getLineSensorTableTable());
 
-        VisionProcessor targetDetectProcessor = new VisionProcessor(new FindLineVisionProcess(netConfig.visualTargetSensor), new DockingTargetDetectPipelineWrapper());
-        dockingTargetDetectConfigurator.initialize(netConfig.camerasTable, targetDetectProcessor, "Docking Target Detection", colorMode, netConfig.visualTargetSensor);
+        VisionProcessor targetDetectProcessor = new VisionProcessor(new FindLineVisionProcess(netConfig.gripTable.getDockingTargetTable()), new DockingTargetDetectPipelineWrapper());
+        dockingTargetDetectConfigurator.initialize(netConfig.camerasTable, targetDetectProcessor, "Docking Target Detection", colorMode, netConfig.gripTable.getDockingTargetTable());
     }
 }

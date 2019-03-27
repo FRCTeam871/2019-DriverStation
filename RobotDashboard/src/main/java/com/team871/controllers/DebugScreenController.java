@@ -2,10 +2,10 @@ package com.team871.controllers;
 
 import com.team871.config.IDashboardConfig;
 import com.team871.config.Style.ColorMode;
-import com.team871.config.Style.ColorModeController;
-import com.team871.config.network.DeepSpaceNetworkVariables;
-import com.team871.modules.*;
-import com.team871.util.data.NumericalDataValue;
+import com.team871.config.network.DeepSpaceNetConfig;
+import com.team871.modules.BinaryIndicator;
+import com.team871.modules.CircleGraph;
+import com.team871.modules.PIDTuner;
 import javafx.fxml.FXML;
 
 /**
@@ -28,13 +28,14 @@ public class DebugScreenController {
 
 
     @FXML
-    void initialize(IDashboardConfig config, DeepSpaceNetworkVariables netConfig) {
+    void initialize(IDashboardConfig config, DeepSpaceNetConfig netConfig) {
         ColorMode colorMode = config.getColorMode();
 
-        binaryIndicator1.initialize(colorMode, "isGrabbing", netConfig.isGrabbing);
-        circleGraph1.initialize(colorMode, netConfig.heading);
+//        binaryIndicator1.initialize(colorMode, "isGrabbing", );
+        circleGraph1.initialize(colorMode, netConfig.robotLocalizationTable.getHeading());
         circleGraph1.createRadialHeadingGraph();
-        pid1.initialize(netConfig.upperArmPID, colorMode);
+//        pid1.initialize(netConfig.upperArmPID, colorMode);
 
+        //TODO: make netTable objects for Grabber and PID's
     }
 }

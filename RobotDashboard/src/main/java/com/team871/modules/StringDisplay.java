@@ -1,7 +1,7 @@
 package com.team871.modules;
 
 import com.team871.config.Style.ColorMode;
-import com.team871.util.data.IData;
+import javafx.beans.value.ObservableValue;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
@@ -11,15 +11,15 @@ import javafx.scene.layout.HBox;
 public class StringDisplay extends HBox {
 
     private ColorMode colorMode;
-    private IData<String> data;
+    private ObservableValue<String> data;
     private Label textArea;
     private Label nameDisplay;
 
-    public StringDisplay(ColorMode colorMode, IData<String> data, String name) {
+    public StringDisplay(ColorMode colorMode, ObservableValue<String> data, String name) {
         this(colorMode, data, name, ':');
     }
 
-    public StringDisplay(ColorMode colorMode, IData<String> data, String name, char dataPrefix) {
+    public StringDisplay(ColorMode colorMode, ObservableValue<String> data, String name, char dataPrefix) {
         this.colorMode = colorMode;
         this.data = data;
 

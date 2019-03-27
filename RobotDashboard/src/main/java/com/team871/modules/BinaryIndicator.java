@@ -1,7 +1,7 @@
 package com.team871.modules;
 
 import com.team871.config.Style.ColorMode;
-import com.team871.util.data.IData;
+import javafx.beans.value.ObservableValue;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
@@ -25,7 +25,7 @@ public class BinaryIndicator extends VBox {
      * @param title     the title/name of the indicator.
      * @param data      the value this indicator will update to.
      */
-    public BinaryIndicator(ColorMode colorMode, String title, IData<Boolean> data) {
+    public BinaryIndicator(ColorMode colorMode, String title, ObservableValue<Boolean> data) {
         this();
         initialize(colorMode,title, data);
     }
@@ -53,7 +53,7 @@ public class BinaryIndicator extends VBox {
      * @param title     the title/name of the indicator.
      * @param data      the value this indicator will update to.
      */
-    public void initialize(ColorMode colorMode, String title, IData<Boolean> data) {
+    public void initialize(ColorMode colorMode, String title, ObservableValue<Boolean> data) {
         initialize(colorMode, title, data, false);
     }
 
@@ -64,7 +64,7 @@ public class BinaryIndicator extends VBox {
      * @param data      the value this indicator will update to.
      * @param isInverted whether or not the data value will be inverted.
      */
-    public void initialize(ColorMode colorMode, String title, IData<Boolean> data, boolean isInverted) {
+    public void initialize(ColorMode colorMode, String title, ObservableValue<Boolean> data, boolean isInverted) {
         this.title.setText(title);
         this.title.setTextFill(colorMode.getSecondaryColor());
         this.invert = isInverted;

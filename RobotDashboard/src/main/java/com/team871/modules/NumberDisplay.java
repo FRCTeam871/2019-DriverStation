@@ -1,24 +1,19 @@
 package com.team871.modules;
 
 import com.team871.config.Style.ColorMode;
-import com.team871.util.data.IData;
+import javafx.beans.value.ObservableValue;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 
-import java.text.DecimalFormat;
-
 public class NumberDisplay extends HBox {
 
-    private ColorMode colorMode;
-    private IData<Double> data;
     private Label textArea;
     private Label nameDisplay;
-    private DecimalFormat df;
 
 
-    public NumberDisplay(ColorMode colorMode, IData<Double> data, String name, char dataPrefix) {
+    public NumberDisplay(ColorMode colorMode, ObservableValue<Double> data, String name, char dataPrefix) {
         this();
         initialize(colorMode, data, name, dataPrefix);
     }
@@ -32,10 +27,7 @@ public class NumberDisplay extends HBox {
         this.setPadding(new Insets(3, 3, 3, 3));
     }
 
-    public void initialize(ColorMode colorMode, IData<Double> data, String name, char dataPrefix) {
-        this.colorMode = colorMode;
-        this.data = data;
-
+    public void initialize(ColorMode colorMode, ObservableValue<Double> data, String name, char dataPrefix) {
         nameDisplay.setText(name + dataPrefix + " ");
         textArea.setText(Double.toString(round(data.getValue(), 2)));
 

@@ -17,6 +17,7 @@ public class DataValue<e> implements IData<e> {
 
     private e value;
 
+
     /**
      *
      * @param value of this DataValue Object

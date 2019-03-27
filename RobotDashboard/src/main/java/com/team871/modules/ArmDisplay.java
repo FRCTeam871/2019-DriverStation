@@ -1,6 +1,6 @@
 package com.team871.modules;
 
-import com.team871.util.data.IData;
+import com.team871.config.network.tables.ArmNetTable;
 import javafx.animation.AnimationTimer;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -35,7 +35,7 @@ public class ArmDisplay extends VBox {
 
     }
 
-    public void initialize(IData<Double> readAngle1, IData<Double> readAngle2, IData<Double> readAngle3){
+    public void initialize(ArmNetTable armNetworkTable){
 
 
 
@@ -60,9 +60,9 @@ public class ArmDisplay extends VBox {
 
                 int size = 20;
 
-                double angle1 = readAngle1.getValue();
-                double angle2 = readAngle2.getValue();
-                double angle3 = readAngle3.getValue() * 90.0;
+                double angle1 = armNetworkTable.getLowerArmAngle().getValue();
+                double angle2 = armNetworkTable.getUpperArmAngle().getValue();
+                double angle3 = armNetworkTable.getWristAngle().getValue() * 90.0;
 
 
                 drawArm(graphicsContext, length1, length2, size, angle1, angle2, angle3, false, Color.TRANSPARENT, Color.TRANSPARENT);

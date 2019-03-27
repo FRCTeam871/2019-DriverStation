@@ -119,7 +119,7 @@ public class CScoreInterface implements ObservableValue<List<VideoCamera>> {
     //Private:
 
     private List<HttpCamera> findCameras(){
-        if (camerasTable.getSubTables().isEmpty()) {
+        if (camerasTable==null || camerasTable.getSubTables().isEmpty()) {
             return null;
         }
 

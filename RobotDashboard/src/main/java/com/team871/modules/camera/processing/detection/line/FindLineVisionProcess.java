@@ -1,8 +1,8 @@
 package com.team871.modules.camera.processing.detection.line;
 
+import com.team871.config.network.tables.TargetNetTable;
 import com.team871.modules.camera.processing.detection.ITargetPipeline;
 import com.team871.modules.camera.processing.detection.IVisionProcess;
-import edu.wpi.first.networktables.NetworkTable;
 import org.opencv.core.MatOfPoint2f;
 import org.opencv.core.RotatedRect;
 import org.opencv.imgproc.Imgproc;
@@ -15,15 +15,8 @@ import java.text.DecimalFormat;
  */
 public class FindLineVisionProcess implements IVisionProcess {
 
-    private final NetworkTable publishOrigin;
+    private final TargetNetTable targetNetworkTable;
 
-    private final String HAS_LINE_KEY = "hasTarget";
-    private final String ANGLE_KEY    = "angle";
-    private final String CENTER_X_KEY = "centerX";
-    private final String CENTER_Y_KEY = "centerY";
-    private final String LENGTH_X_KEY = "lengthX";
-    private final String LENGTH_Y_KEY = "lengthY";
-    private final String DISTANCE_KEY = "distance";
 
     private final double WIDTH = 720;
 
@@ -34,8 +27,8 @@ public class FindLineVisionProcess implements IVisionProcess {
     private double lengthX  = 0;
     private double lengthY  = 0;
 
-    public FindLineVisionProcess(NetworkTable publishingOrigin){
-        this.publishOrigin = publishingOrigin;
+    public FindLineVisionProcess(TargetNetTable targetNetworkTable){
+        this.targetNetworkTable = targetNetworkTable;
     }
 
     @Override
@@ -69,13 +62,13 @@ public class FindLineVisionProcess implements IVisionProcess {
 
     private void NtPublish(){
 
-        publishOrigin.getEntry(HAS_LINE_KEY).setBoolean(hasLine);
-        publishOrigin.getEntry(ANGLE_KEY)   .setDouble(angle);
-        publishOrigin.getEntry(CENTER_X_KEY).setDouble(centerX);
-        publishOrigin.getEntry(CENTER_Y_KEY).setDouble(centerY);
-        publishOrigin.getEntry(LENGTH_X_KEY).setDouble(lengthX);
-        publishOrigin.getEntry(LENGTH_Y_KEY).setDouble(lengthY);
-        publishOrigin.getEntry(DISTANCE_KEY).setDouble(0.0);
+        targetNetworkTable.getHasTargetEntry().setBoolean(hasLine);
+        targetNetworkTable.getAngleEntry().setDouble(angle);
+        targetNetworkTable.getCenterXEntry().setDouble(centerX);
+        targetNetworkTable.getCenterYEntry().setDouble(centerY);
+        targetNetworkTable.getLengthXEntry().setDouble(lengthX);
+        targetNetworkTable.getLengthYEntry().setDouble(lengthY);
+        targetNetworkTable.getDistanceKey().setDouble(0.0);
 
     }
 

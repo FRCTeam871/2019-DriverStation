@@ -1,12 +1,12 @@
 package com.team871.modules;
 
 import com.team871.config.Style.ColorMode;
-import com.team871.util.data.IData;
 import com.team871.util.data.NumericalDataValue;
 import eu.hansolo.medusa.Gauge;
 import eu.hansolo.medusa.Gauge.ScaleDirection;
 import eu.hansolo.medusa.Gauge.SkinType;
 import eu.hansolo.medusa.GaugeBuilder;
+import javafx.beans.value.ObservableValue;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.layout.VBox;
@@ -22,7 +22,7 @@ public class CircleGraph extends VBox {
 
     private Gauge gauge;
     private ColorMode colorMode;
-    private IData<Double> data;
+    private ObservableValue<Double> data;
     private boolean isNormalized;
 
     public CircleGraph() {
@@ -59,7 +59,7 @@ public class CircleGraph extends VBox {
      * @param colorMode     the color mode settings to be used in this Graph
      * @param data          the data this graph will read from.
      */
-    public void initialize(ColorMode colorMode, IData<Double> data) {
+    public void initialize(ColorMode colorMode, ObservableValue<Double> data) {
         this.colorMode = colorMode;
         this.data = data;
 

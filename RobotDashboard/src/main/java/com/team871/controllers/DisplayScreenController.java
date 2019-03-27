@@ -2,7 +2,7 @@ package com.team871.controllers;
 
 import com.team871.config.DefaultDashboardConfig;
 import com.team871.config.IDashboardConfig;
-import com.team871.config.network.DeepSpaceNetworkVariables;
+import com.team871.config.network.DeepSpaceNetConfig;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.Parent;
@@ -44,7 +44,7 @@ public class DisplayScreenController {
 
     @FXML
     void initialize(){
-        DeepSpaceNetworkVariables networkVariables = new DeepSpaceNetworkVariables(true, config.getNetworkTableInstance(), "0.00");
+        DeepSpaceNetConfig networkVariables = new DeepSpaceNetConfig(true, config.getNetworkTableInstance(), "0.00");
         Background backgroundConf = new Background(new BackgroundFill(config.getColorMode().getBackgroundColor(), CornerRadii.EMPTY, Insets.EMPTY));
         background.setBackground(backgroundConf);
         menuBackground.setBackground(backgroundConf);

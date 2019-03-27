@@ -1,13 +1,12 @@
 package com.team871.modules.camera.processing.detection;
 
 import com.team871.config.Style.ColorMode;
-import com.team871.config.network.DeepSpaceNetConfig;
+import com.team871.config.network.tables.TargetNetTable;
 import com.team871.modules.BinaryIndicator;
 import com.team871.modules.camera.CameraSelector;
 import com.team871.util.data.NetBinaryDataValue;
 import edu.wpi.cscore.CvSink;
 import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableEntry;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
@@ -58,11 +57,10 @@ public class VisionProcessConfigurator extends VBox {
      * @param colorMode what to set the /
      * @param dataOutputTable
      */
-    public void initialize(NetworkTable camerasTable, VisionProcessor visionProcessor, String processName, ColorMode colorMode, NetworkTable dataOutputTable) {
+    public void initialize(NetworkTable camerasTable, VisionProcessor visionProcessor, String processName, ColorMode colorMode, TargetNetTable dataOutputTable) {
         initialize(camerasTable, visionProcessor, processName, colorMode);
 
-        NetworkTableEntry hasTargetEntry = dataOutputTable.getEntry(DeepSpaceNetConfig.HAS_TARGET_KEY);
-        targetFoundIndicator.initialize(colorMode, "Found Target", new NetBinaryDataValue(hasTargetEntry));
+        targetFoundIndicator.initialize(colorMode, "Found Target", new NetBinaryDataValue(dataOutputTable.getHasTargetEntry()));
 
         indicatorsPanel.getChildren().add(targetFoundIndicator);
     }

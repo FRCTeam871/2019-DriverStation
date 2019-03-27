@@ -4,6 +4,8 @@ package com.team871.config.network;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 
+import java.util.Arrays;
+
 /**
  * @author TP-Laptop on 1/5/2019.
  * @project Robotics-Dashboard-Code
@@ -73,6 +75,7 @@ public abstract class AbstractNetConfig {
       }else{
         System.out.println("NetworkTable connection started with no found problems");
         System.out.println( networkIdentity + " broadcasting with version: " + VERSION_VAL);
+        System.out.println( "Currently connected to: " + Arrays.toString(this.getInstance().getConnections()));
       }
       System.out.println(" \n");
       Thread.currentThread().interrupt();
