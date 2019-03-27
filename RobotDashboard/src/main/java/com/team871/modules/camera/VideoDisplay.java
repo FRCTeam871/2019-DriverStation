@@ -2,6 +2,7 @@ package com.team871.modules.camera;
 
 import com.team871.config.Style.ColorMode;
 import com.team871.modules.camera.processing.cscore.CScoreInterface;
+import com.team871.util.TimedLoopRunnable;
 import edu.wpi.cscore.CameraServerJNI;
 import edu.wpi.cscore.CvSink;
 import edu.wpi.cscore.VideoEvent;
@@ -20,6 +21,7 @@ import java.text.DecimalFormat;
 public class VideoDisplay extends VBox {
 
     private ImageView display;
+    private Image currentFrame;
     private CameraSelector cameraSelector;
     private HBox currentCameraInfoBox;
     private Label currentCameraFPS;
@@ -30,6 +32,7 @@ public class VideoDisplay extends VBox {
     private double camWidth;
     private CvSink cvsink;
 
+    private Thread frameUpdateThread;
     private AnimationTimer displayUpdateThread;
 
 
@@ -62,23 +65,31 @@ public class VideoDisplay extends VBox {
         this.getChildren().addAll( new HBox(cameraSelector, currentCameraInfoBox));
         updateColor(colorMode);
 
+        currentFrame = new Image("noCam.png");
+
+
         camWidth  = displayWidth;
         camHeight = displayHeight;
         display.setFitHeight(camHeight);
         display.setFitWidth(camWidth);
 
 
+        Runnable frameUpdateTask = new TimedLoopRunnable(() -> {
+            if (cvsink!=null && cvsink.isValid() && cvsink.getSource().isValid()) {
+                currentFrame = CScoreInterface.grabImage(cvsink, 33);
+                //update current frame from CvSink
+            }
+        }, 31,"VideoDisplayUpdate");
+
+        frameUpdateThread = new Thread(frameUpdateTask);
+        frameUpdateThread.setDaemon(true);
+        frameUpdateThread.start();
+
         displayUpdateThread = new AnimationTimer() {
             @Override
             public void handle(long now) {
-                if (cvsink!=null && cvsink.isValid() && cvsink.getSource().isValid()) {
-
-                    display.setImage(CScoreInterface.grabImage(cvsink));
+                    display.setImage(currentFrame);
                     //grabbing from CV source setting the source to JavaFX display
-                }
-                else {
-
-                }
             }
         };
 
@@ -134,6 +145,7 @@ public class VideoDisplay extends VBox {
 
     private void close(){
         System.out.println("Closing Video Display");
+        frameUpdateThread.interrupt();
         displayUpdateThread.stop();
         if(cvsink!= null)
             cvsink.close();

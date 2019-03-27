@@ -4,7 +4,7 @@ package com.team871.util;
  * @author T3Pfaffe on 3/7/2019.
  * @project DriverStation
  */
-public class TimedLoopThread implements Runnable{
+public class TimedLoopRunnable implements Runnable{
 
     private final Runnable runnable;
     private final long rate;
@@ -18,7 +18,7 @@ public class TimedLoopThread implements Runnable{
      * @param runnable what will be looped
      * @param rate how many times this should run *per second*
      */
-    public TimedLoopThread(Runnable runnable, long rate){
+    public TimedLoopRunnable(Runnable runnable, long rate){
         this(runnable, rate, "UnnamedTimedLoopThread");
     }
 
@@ -27,7 +27,7 @@ public class TimedLoopThread implements Runnable{
      * @param runnable what will be looped
      * @param rate how many times this should run *per second*
      */
-    public TimedLoopThread(Runnable runnable, long rate, String name){
+    public TimedLoopRunnable(Runnable runnable, long rate, String name){
         this.runnable = runnable;
         this.rate = rate;
         this.name = name;
@@ -53,7 +53,7 @@ public class TimedLoopThread implements Runnable{
                 if (doDebugPrint)
                     System.out.println("Met target loop rate of " + rate + "hz (" + 1000/rate + "ms) by: " + sleepMillis +"ms");
             } catch (InterruptedException e) {
-                System.out.println("Sleep interrupt on an instance of TimedLoopThread from: (" + this.runnable.toString() + ") ");
+                System.out.println("Sleep interrupt on an instance of TimedLoopRunnable from: (" + this.runnable.toString() + ") ");
             }
         }
     }

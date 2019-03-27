@@ -1,6 +1,6 @@
 package com.team871.modules.camera.processing.cscore;
 
-import com.team871.util.TimedLoopThread;
+import com.team871.util.TimedLoopRunnable;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.videoio.VideoCapture;
@@ -50,7 +50,7 @@ public class WindowsUsbCameraWrapper {
                 cvSinkStream.putFrame(captureImg);
         };
 
-        videoUpdateThread = new Thread(new TimedLoopThread(videoUpdateTask, FPS));
+        videoUpdateThread = new Thread(new TimedLoopRunnable(videoUpdateTask, FPS));
         videoUpdateThread.setDaemon(true);
         videoUpdateThread.start();
 

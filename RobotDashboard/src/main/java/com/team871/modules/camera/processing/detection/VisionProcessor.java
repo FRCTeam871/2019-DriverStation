@@ -1,7 +1,7 @@
 package com.team871.modules.camera.processing.detection;
 
 import com.team871.modules.camera.processing.cscore.CvSinkStreamWrapper;
-import com.team871.util.TimedLoopThread;
+import com.team871.util.TimedLoopRunnable;
 import com.team871.util.data.BinaryDataValue;
 import com.team871.util.data.IData;
 import edu.wpi.cscore.CvSink;
@@ -66,7 +66,7 @@ public class VisionProcessor {
                 }
             }
         };
-        visionProcessThread = new Thread(new TimedLoopThread(vissionProcces,FPS));
+        visionProcessThread = new Thread(new TimedLoopRunnable(vissionProcces,FPS));
         visionProcessThread.setDaemon(true);
         visionProcessThread.start();
 
