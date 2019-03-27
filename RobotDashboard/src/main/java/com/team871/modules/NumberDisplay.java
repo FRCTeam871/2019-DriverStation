@@ -18,6 +18,11 @@ public class NumberDisplay extends VBox {
     private DecimalFormat df;
 
 
+    public NumberDisplay(ColorMode colorMode, IData<Double> data, String name) {
+        this();
+        initialize(colorMode, data, name);
+    }
+
     public NumberDisplay() {
         nameDisplay = new Label("Not initialized: ");
         textArea = new Label("0/0");

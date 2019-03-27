@@ -5,7 +5,7 @@ import edu.wpi.first.networktables.NetworkTableEntry;
 
 public class NetBinaryDataValue extends BinaryDataValue implements IData<Boolean> {
 
-  private NetworkTableEntry entry;
+
 
   /**
    * Will update to this network entry
@@ -14,23 +14,17 @@ public class NetBinaryDataValue extends BinaryDataValue implements IData<Boolean
    */
   public NetBinaryDataValue(NetworkTableEntry entry) {
     super();
-    this.entry = entry;
-
 
     //Updates:
     entry.addListener(event -> {
       try {
-        super.set(event.value.getBoolean());
+        setValue(event.value.getBoolean());
       } catch (ClassCastException e) {
         System.out.println("Table Entry(" + entry.getInfo() + "): " + e.toString());
       }
     }, EntryListenerFlags.kNew | EntryListenerFlags.kUpdate);
 
-    super.set(false);
+    setValue(false);
   }
 
-
-    private void initialize() {
-
-    }
 }

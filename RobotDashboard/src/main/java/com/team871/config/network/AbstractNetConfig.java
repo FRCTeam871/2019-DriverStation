@@ -17,9 +17,13 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 public abstract class AbstractNetConfig {
 
   private final NetworkTableInstance networkTableInstance;
+  public final String networkIdentity;
+
+  //Server-client version check keys:
   public final String SERVER_VERSION_KEY = "SERVER_VERSION";
   public final String CLIENT_VERSION_KEY = "CLIENT_VERSION";
 
+  //Generic match information keys:
   public final String FMS_TABLE_KEY             = "FMSInfo";
   public final String EVENT_NAME_KEY            = "EventName";
   public final String GAMES_SPECFIC_MESSAGE_KEY = "GameSpecificMessage";
@@ -29,7 +33,7 @@ public abstract class AbstractNetConfig {
   public final String REPLAY_NUMBER_KEY         = "ReplayNumber";
   public final String STATION_NUMBER_KEY        = "StationNumber";
 
-  public final String networkIdentity;
+
   private Thread checkVersionThread;
 
   public AbstractNetConfig(boolean isClient, NetworkTableInstance instance){
@@ -37,7 +41,7 @@ public abstract class AbstractNetConfig {
   }
 
   public AbstractNetConfig(boolean isClient, NetworkTableInstance instance, String VERSION_VAL) {
-    Runtime.getRuntime().addShutdownHook(new Thread(this::close));
+
     this.networkTableInstance = instance;
 
     if(isClient) {
@@ -55,7 +59,7 @@ public abstract class AbstractNetConfig {
         while(!instance.isConnected())
           Thread.sleep(50);
       } catch (InterruptedException e) {
-//        e.printStackTrace();
+        //nothing
       }
 
       System.out.println(" ");
@@ -80,7 +84,6 @@ public abstract class AbstractNetConfig {
     checkVersionThread.start();
     //Fun fact #3064: you cant set Daemeon to true if you already started the thread.
 
-    Runtime.getRuntime().addShutdownHook(new Thread(this::close));
   }
 
 
@@ -94,12 +97,5 @@ public abstract class AbstractNetConfig {
   }
 
   public abstract NetworkTable getDefaultTable();
-
-
-  private void close(){
-    if(checkVersionThread.isAlive()){
-      checkVersionThread.interrupt();
-    }
-  }
 
 }

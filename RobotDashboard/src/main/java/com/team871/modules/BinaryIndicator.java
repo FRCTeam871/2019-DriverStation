@@ -19,6 +19,17 @@ public class BinaryIndicator extends VBox {
     private Label title;
     private boolean invert;
 
+    /**
+     * Will display a true or false status.
+     * @param colorMode changes the font colors to match colorMode.
+     * @param title     the title/name of the indicator.
+     * @param data      the value this indicator will update to.
+     */
+    public BinaryIndicator(ColorMode colorMode, String title, IData<Boolean> data) {
+        this();
+        initialize(colorMode,title, data);
+    }
+
     public BinaryIndicator() {
 
         circle = new Circle();

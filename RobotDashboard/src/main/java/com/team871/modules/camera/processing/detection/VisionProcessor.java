@@ -4,6 +4,7 @@ import com.team871.modules.camera.processing.cscore.CvSinkStreamWrapper;
 import com.team871.util.TimedLoopRunnable;
 import com.team871.util.data.BinaryDataValue;
 import com.team871.util.data.IData;
+import com.team871.util.data.MutableDataValue;
 import edu.wpi.cscore.CvSink;
 import edu.wpi.cscore.VideoException;
 import org.opencv.core.Mat;
@@ -26,7 +27,7 @@ public class VisionProcessor {
     private CvSinkStreamWrapper cvSinkStream;
     private CvSink imageIn;
     private boolean doRun;
-    private BinaryDataValue isWorking;
+    private MutableDataValue<Boolean> isWorking;
 
 
     public VisionProcessor(IVisionProcess process, ITargetPipeline pipeline){
@@ -37,10 +38,10 @@ public class VisionProcessor {
         this.imageIn = imageInput;
 
         doRun = false;
-        isWorking = new BinaryDataValue(false);
+        isWorking = new MutableDataValue<>(new BinaryDataValue(false));
         Mat outputImage = new Mat();
 
-        Runnable vissionProcces = () -> {
+        Runnable visionProcess = () -> {
             if(doRun) {
                 if (imageIn != null && imageIn.isValid() && imageIn.getSource().isValid()) {
                     imageIn.grabFrame(outputImage, 1000.0 / MIN_FPS);
@@ -50,7 +51,6 @@ public class VisionProcessor {
 
                     if (cvSinkStream!= null && cvSinkStream.isValid()) {
                         try {
-
                             overLayTarget(outputImage, pipeline.outputTargets());
                             cvSinkStream.putFrame(outputImage);
                         } catch (VideoException e){
@@ -58,15 +58,13 @@ public class VisionProcessor {
                         }
                     }
 
-                    if (!isWorking.getValue())
-                        isWorking.invert();
+                    isWorking.setValue(true);
                 } else {
-                    if (isWorking.getValue())
-                        isWorking.invert();
+                    isWorking.setValue(false);
                 }
             }
         };
-        visionProcessThread = new Thread(new TimedLoopRunnable(vissionProcces,FPS));
+        visionProcessThread = new Thread(new TimedLoopRunnable(visionProcess,FPS));
         visionProcessThread.setDaemon(true);
         visionProcessThread.start();
 
@@ -93,10 +91,10 @@ public class VisionProcessor {
         doRun = false;
     }
 
-    public void overLayTarget(Mat source, List<MatOfPoint> targets) {
+    private void overLayTarget(Mat source, List<MatOfPoint> targets) {
         Imgproc.drawContours(source, targets, -1, new Scalar(255,0,0));
-
     }
+
 
     public void close(){
         doRun = false;

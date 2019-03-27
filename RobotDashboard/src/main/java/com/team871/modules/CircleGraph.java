@@ -103,7 +103,7 @@ public class CircleGraph extends VBox {
         data.addListener((observable, old, newValue) -> {
             if (isNormalized && data instanceof NumericalDataValue) {//don't worry this cast is 'safe'
                 gauge.setValue(newValue);
-                //gauge.setValue(((NumericalDataValue) data).getValue(gauge.getMaxValue(), gauge.getMinValue()) );
+                //gauge.setValue(((NumericalDataValue) data).getNormalizedValue(gauge.getMaxValue(), gauge.getMinValue()) );
             }
             else {
                 gauge.setValue(newValue);
