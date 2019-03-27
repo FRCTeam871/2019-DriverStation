@@ -88,7 +88,7 @@ public class CScoreInterface implements ObservableValue<List<VideoCamera>> {
     }
 
     public List<VideoCamera> getFoundCameras(){
-        return foundCameras;
+        return new ArrayList<>(foundCameras);
     }
 
     public static Image grabImage(CvSink input){
