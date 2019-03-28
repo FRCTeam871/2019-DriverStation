@@ -18,7 +18,7 @@ public class FindLineVisionProcess implements IVisionProcess {
     private final TargetNetTable targetNetworkTable;
 
 
-    private final double WIDTH = 720;
+    private final double WIDTH = 480;
 
     private boolean hasLine = false;
     private double angle    = 0;

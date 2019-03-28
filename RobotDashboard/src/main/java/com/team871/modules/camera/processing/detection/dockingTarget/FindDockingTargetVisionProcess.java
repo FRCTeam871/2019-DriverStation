@@ -1,8 +1,8 @@
 package com.team871.modules.camera.processing.detection.dockingTarget;
 
+import com.team871.config.network.tables.TargetNetTable;
 import com.team871.modules.camera.processing.detection.ITargetPipeline;
 import com.team871.modules.camera.processing.detection.IVisionProcess;
-import edu.wpi.first.networktables.NetworkTable;
 import org.opencv.core.CvType;
 import org.opencv.core.MatOfPoint2f;
 import org.opencv.core.RotatedRect;
@@ -14,17 +14,9 @@ import java.util.stream.Collectors;
 
 public class FindDockingTargetVisionProcess implements IVisionProcess {
 
-    private final NetworkTable publishOrigin;
+    private final TargetNetTable targetNetworkTable;
 
-    private final String HAS_TARGET_KEY = "hasTarget";
-    private final String ANGLE_KEY    = "angle";
-    private final String CENTER_X_KEY = "centerX";
-    private final String CENTER_Y_KEY = "centerY";
-    private final String LENGTH_X_KEY = "lengthX";
-    private final String LENGTH_Y_KEY = "lengthY";
-    private final String DISTANCE_KEY = "distance";
-
-    private final double WIDTH = 720;
+    private final double WIDTH = 480;
 
     private boolean hasTarget = false;
     private double angle    = 0;
@@ -34,8 +26,8 @@ public class FindDockingTargetVisionProcess implements IVisionProcess {
     private double lengthY  = 0;
     private double distance = 0;
 
-    public FindDockingTargetVisionProcess(NetworkTable publishingOrigin){
-        this.publishOrigin = publishingOrigin;
+    public FindDockingTargetVisionProcess(TargetNetTable targetNetworkTable){
+        this.targetNetworkTable = targetNetworkTable;
     }
 
     @Override
@@ -93,13 +85,13 @@ public class FindDockingTargetVisionProcess implements IVisionProcess {
     }
 
     private void NtPublish(){
-        publishOrigin.getEntry(HAS_TARGET_KEY).setBoolean(hasTarget);
-        publishOrigin.getEntry(ANGLE_KEY)   .setDouble(angle);
-        publishOrigin.getEntry(CENTER_X_KEY).setDouble(centerX);
-        publishOrigin.getEntry(CENTER_Y_KEY).setDouble(centerY);
-        publishOrigin.getEntry(LENGTH_X_KEY).setDouble(lengthX);
-        publishOrigin.getEntry(LENGTH_Y_KEY).setDouble(lengthY);
-        publishOrigin.getEntry(DISTANCE_KEY).setDouble(distance);
+        targetNetworkTable.getHasTargetEntry().setBoolean(hasTarget);
+        targetNetworkTable.getAngleEntry().setDouble(angle);
+        targetNetworkTable.getCenterXEntry().setDouble(centerX);
+        targetNetworkTable.getCenterYEntry().setDouble(centerY);
+        targetNetworkTable.getLengthXEntry().setDouble(lengthX);
+        targetNetworkTable.getLengthYEntry().setDouble(lengthY);
+        targetNetworkTable.getDistanceKey().setDouble(0.0);
     }
 
 }

@@ -37,6 +37,8 @@ public class DefaultDashboardConfig implements IDashboardConfig {
     networkTableInstance = NetworkTableInstance.getDefault();
     networkTableInstance.setNetworkIdentity(networkID);
     networkTableInstance.startClientTeam(teamNumber);
+
+//    networkTableInstance.setServer("10.8.71.21"); this was the ip of the Pi server, only use if the pi is set to be a Server.
   }
 
   @Override

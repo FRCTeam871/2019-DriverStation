@@ -34,8 +34,8 @@ public class WindowsUsbCameraWrapper {
 
         //Statics
         FPS = 30;
-        Width = 1280;
-        Height = 720;
+        Width = 480;
+        Height = 320;
 
         //CV objects
         videoCapture = new VideoCapture(usbIndex);

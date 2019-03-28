@@ -11,6 +11,7 @@ import com.team871.modules.camera.VideoDisplay;
 import com.team871.modules.camera.processing.detection.VisionProcessConfigurator;
 import com.team871.modules.camera.processing.detection.VisionProcessor;
 import com.team871.modules.camera.processing.detection.dockingTarget.DockingTargetDetectPipelineWrapper;
+import com.team871.modules.camera.processing.detection.dockingTarget.FindDockingTargetVisionProcess;
 import com.team871.modules.camera.processing.detection.line.FindLineVisionProcess;
 import com.team871.modules.camera.processing.detection.line.LineDetectPipelineWrapper;
 import com.team871.util.data.BinaryDataValue;
@@ -72,7 +73,7 @@ public class DriveScreenController {
         VisionProcessor lineDetectProcessor = new VisionProcessor(new FindLineVisionProcess(netConfig.gripTable.getLineSensorTableTable()), new LineDetectPipelineWrapper());
         lineDetectConfigurator.initialize(netConfig.camerasTable, lineDetectProcessor, "Line Detection", colorMode, netConfig.gripTable.getLineSensorTableTable());
 
-        VisionProcessor targetDetectProcessor = new VisionProcessor(new FindLineVisionProcess(netConfig.gripTable.getDockingTargetTable()), new DockingTargetDetectPipelineWrapper());
+        VisionProcessor targetDetectProcessor = new VisionProcessor(new FindDockingTargetVisionProcess(netConfig.gripTable.getDockingTargetTable()), new DockingTargetDetectPipelineWrapper());
         dockingTargetDetectConfigurator.initialize(netConfig.camerasTable, targetDetectProcessor, "Docking Target Detection", colorMode, netConfig.gripTable.getDockingTargetTable());
     }
 }

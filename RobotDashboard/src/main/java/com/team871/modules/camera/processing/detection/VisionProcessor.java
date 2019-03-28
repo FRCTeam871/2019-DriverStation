@@ -92,7 +92,7 @@ public class VisionProcessor {
     }
 
     private void overLayTarget(Mat source, List<MatOfPoint> targets) {
-        Imgproc.drawContours(source, targets, -1, new Scalar(255,0,0));
+        Imgproc.drawContours(source, targets, -1, new Scalar(255,255,255));
     }
 
 
